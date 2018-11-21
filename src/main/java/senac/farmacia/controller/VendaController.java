@@ -124,7 +124,19 @@ public class VendaController {
 
 	public void pesquisarPornome() {
 		String nome = txPesquisa.getText();
-		remediosEmEstoque = estoquedao.PesquisarPorNomeTESTE(nome);
+		remediosEmEstoque = estoquedao.pesquisarPorNomeTESTE(nome);
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		model.setNumRows(0);
+		for (Estoque e : remediosEmEstoque) {
+			model.addRow(new Object[] { e.getRemedio().getIdRemedio(), e.getRemedio().getNomecomercial(),
+					e.getRemedio().getLaboratorio(), e.getRemedio().getPrecounitario(), e.getQuantidade() });
+		}
+
+	}
+	
+	public void pesquisarPorComposicao() {
+		String composicao = txPesquisa.getText();
+		remediosEmEstoque = estoquedao.pesquisarPorComposicao(composicao);
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		model.setNumRows(0);
 		for (Estoque e : remediosEmEstoque) {

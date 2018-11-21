@@ -12,10 +12,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -33,6 +35,7 @@ import senac.farmacia.model.vo.Cliente;
 import senac.farmacia.model.vo.Estoque;
 import senac.farmacia.model.vo.Remedio;
 import senac.farmacia.model.vo.Venda;
+import javax.swing.JRadioButton;
 
 public class ViewVenda extends JInternalFrame {
 	private JTextField txHoraTransaction;
@@ -95,7 +98,7 @@ public class ViewVenda extends JInternalFrame {
 		setClosable(true);
 		getContentPane().setForeground(Color.RED);
 		setTitle("Venda");
-		setBounds(100, 100, 1182, 548);
+		setBounds(100, 100, 1182, 601);
 		getContentPane().setLayout(null);
 
 		JLabel lblHoraDaTransao = new JLabel("Hora da transação :");
@@ -198,7 +201,7 @@ public class ViewVenda extends JInternalFrame {
 
 			}
 		});
-		scrollPane.setBounds(10, 246, 453, 261);
+		scrollPane.setBounds(10, 299, 453, 261);
 		getContentPane().add(scrollPane);
 
 		table = new JTable();
@@ -214,21 +217,7 @@ public class ViewVenda extends JInternalFrame {
 		getContentPane().add(lblPesquisar);
 
 		txPesquisa = new JTextField();
-		txPesquisa.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-				char c = e.getKeyChar();
-				if (Character.isDigit(c)) {
-					e.consume();
-				}
-			}
 
-			@Override
-			public void keyReleased(KeyEvent arg0) {
-
-				vendacontrol.pesquisarPornome();
-			}
-		});
 		txPesquisa.setBounds(94, 215, 267, 20);
 		getContentPane().add(txPesquisa);
 		txPesquisa.setColumns(10);
@@ -307,7 +296,7 @@ public class ViewVenda extends JInternalFrame {
 		txTotalFinal.setColumns(10);
 
 		JButton btnFinalizarCompra = new JButton("Finalizar Compra");
-	
+
 		btnFinalizarCompra.setBounds(552, 471, 144, 23);
 		getContentPane().add(btnFinalizarCompra);
 
@@ -454,6 +443,56 @@ public class ViewVenda extends JInternalFrame {
 		btnFinalizarCompra.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				vendacontrol.salvarAction();
+			}
+		});
+
+		final JRadioButton rdbtnNomeComercial = new JRadioButton("Nome Comercial");
+		rdbtnNomeComercial.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					rdbtnNomeComercial.setSelected(true);
+				}
+			}
+		});
+		rdbtnNomeComercial.setBounds(51, 254, 128, 23);
+		getContentPane().add(rdbtnNomeComercial);
+
+		final JRadioButton rdbtnComposio = new JRadioButton("Composição");
+		rdbtnComposio.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+					rdbtnComposio.setSelected(true);
+				}
+			}
+		});
+		rdbtnComposio.setBounds(182, 254, 96, 23);
+		getContentPane().add(rdbtnComposio);
+		ButtonGroup buttonGroup1 = new javax.swing.ButtonGroup();
+		buttonGroup1.add(rdbtnComposio);
+		buttonGroup1.add(rdbtnNomeComercial);
+		rdbtnNomeComercial.setSelected(true);
+
+		txPesquisa.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				char c = e.getKeyChar();
+				if (Character.isDigit(c)) {
+					e.consume();
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				if (rdbtnNomeComercial.isSelected()) {
+					vendacontrol.pesquisarPornome();
+
+				} else {
+					vendacontrol.pesquisarPorComposicao();
+					
+				}
+
 			}
 		});
 
