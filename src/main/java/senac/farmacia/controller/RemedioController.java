@@ -45,7 +45,7 @@ public class RemedioController {
 
 		remedio.setComposiçao(txtComposicao.getText());
 		remedio.setLaboratorio(txtMarca.getText());
-		remedio.setConcentraçao(Double.parseDouble(txtMiligrama.getText()));
+		remedio.setConcentraçao(txtMiligrama.getText());
 		remedio.setNomecomercial(txtNomeComercial.getText());
 		remedio.setPrecounitario(Double.parseDouble(txtPreco.getText()));
 		remedio.setQdtecomprimidos(Integer.parseInt(txtQuantidadeComprimido.getText()));

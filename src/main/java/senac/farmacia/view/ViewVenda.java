@@ -2,6 +2,7 @@ package senac.farmacia.view;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -10,6 +11,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -17,7 +20,10 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
+import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -35,7 +41,8 @@ import senac.farmacia.model.vo.Cliente;
 import senac.farmacia.model.vo.Estoque;
 import senac.farmacia.model.vo.Remedio;
 import senac.farmacia.model.vo.Venda;
-import javax.swing.JRadioButton;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 
 public class ViewVenda extends JInternalFrame {
 	private JTextField txHoraTransaction;
@@ -95,6 +102,17 @@ public class ViewVenda extends JInternalFrame {
 	 */
 
 	public ViewVenda() {
+		addInternalFrameListener(new InternalFrameAdapter() {
+			@Override
+			public void internalFrameOpened(InternalFrameEvent arg0) {
+				txPesquisa.grabFocus();
+				txPesquisa.requestFocus();
+				txPesquisa.requestFocus(true);
+				txPesquisa.requestFocusInWindow();
+				
+				
+			}
+		});
 		setClosable(true);
 		getContentPane().setForeground(Color.RED);
 		setTitle("Venda");
@@ -106,10 +124,14 @@ public class ViewVenda extends JInternalFrame {
 		getContentPane().add(lblHoraDaTransao);
 
 		txHoraTransaction = new JTextField();
-		txHoraTransaction.setText("28/10/2018 11.57");
+		
+		
+		
+		txHoraTransaction.setText("");
 		txHoraTransaction.setBounds(156, 27, 139, 20);
 		getContentPane().add(txHoraTransaction);
 		txHoraTransaction.setColumns(10);
+		
 
 		JLabel lblNewLabel = new JLabel("Produto :");
 		lblNewLabel.setBounds(34, 72, 74, 14);
@@ -209,8 +231,18 @@ public class ViewVenda extends JInternalFrame {
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		scrollPane.setViewportView(table);
-		table.setModel(new DefaultTableModel(new Object[][] {},
-				new String[] { "Id Produto", "Nome ", "Laboratorio", "Pre\u00E7o", "Quantidade em estoque" }));
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Id Produto", "Nome ", "Composicao", "Laboratorio", "Pre\u00E7o", "Quantidade em estoque"
+			}
+		));
+		table.getColumnModel().getColumn(0).setPreferredWidth(71);
+		table.getColumnModel().getColumn(1).setPreferredWidth(45);
+		table.getColumnModel().getColumn(3).setPreferredWidth(66);
+		table.getColumnModel().getColumn(4).setPreferredWidth(39);
+		table.getColumnModel().getColumn(5).setPreferredWidth(128);
 
 		JLabel lblPesquisar = new JLabel("Pesquisar  :");
 		lblPesquisar.setBounds(10, 218, 70, 14);
@@ -236,6 +268,7 @@ public class ViewVenda extends JInternalFrame {
 				txTotal.setText("");
 				txQuantidadeDisponivel.setText("");
 				txPesquisa.setText("");
+				txFieldIDProduto.setText("");
 				vendacontrol.pesquisarPornome();
 
 			}
@@ -248,6 +281,29 @@ public class ViewVenda extends JInternalFrame {
 		getContentPane().add(scrollPane_1);
 
 		carrinho = new JTable();
+		JPopupMenu menuCarrinho = new JPopupMenu();
+		JMenuItem menuRemoverLinhaSelecionada = new JMenuItem("Excluir Linha");
+		JMenuItem menuRemoverTodasAsLinhas = new JMenuItem("Excluir tudo");
+		menuCarrinho.add(menuRemoverLinhaSelecionada);
+		menuCarrinho.add(menuRemoverTodasAsLinhas);
+		carrinho.setComponentPopupMenu(menuCarrinho);
+		
+		
+		/*carrinho.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if(arg0.getButton() == MouseEvent.BUTTON3) {
+					JMenuItem anItem = new JMenuItem("Excluir");
+					getContentPane().add(anItem);
+					vendacontrol.rightclick();
+				}
+				
+			}
+		}); */
+		
+				//Fazer right click menu para deletar linha da tabela
+				
+			
 		carrinho.setModel(new DefaultTableModel(new Object[][] {},
 				new String[] { "idProduto", "Nome Comercial", "Pre\u00E7o", "Quantidade" }));
 		carrinho.setForeground(Color.DARK_GRAY);
@@ -401,11 +457,6 @@ public class ViewVenda extends JInternalFrame {
 		btnRealizarCadastro.setBounds(719, 471, 135, 23);
 		getContentPane().add(btnRealizarCadastro);
 		lbFalta.setVisible(false);
-		table.getColumnModel().getColumn(0).setPreferredWidth(71);
-		table.getColumnModel().getColumn(1).setPreferredWidth(45);
-		table.getColumnModel().getColumn(2).setPreferredWidth(66);
-		table.getColumnModel().getColumn(3).setPreferredWidth(39);
-		table.getColumnModel().getColumn(4).setPreferredWidth(128);
 
 		table.addMouseListener(new MouseAdapter() {
 			@Override

@@ -112,7 +112,7 @@ public class EstoqueDAO extends Dao implements BaseDAO<Estoque> {
 		try {
 			PreparedStatement stmt;
 			stmt = conexao.prepareStatement(
-					"Select r.idRemedio,r.nomeComercial,r.laboratorio,r.precoUnitario, e.quantidade from Remedio r join Estoque e on r.idRemedio = e.idRemedio"
+					"Select r.idRemedio,r.nomeComercial,r.laboratorio,r.precoUnitario,r.composicao, e.quantidade from Remedio r join Estoque e on r.idRemedio = e.idRemedio"
 							+ "  where nomeComercial like ?");
 			stmt.setString(1, nome + '%');
 
@@ -124,6 +124,7 @@ public class EstoqueDAO extends Dao implements BaseDAO<Estoque> {
 				e.getRemedio().setNomecomercial(res.getString("r.nomeComercial"));
 				e.getRemedio().setLaboratorio(res.getString("r.laboratorio"));
 				e.getRemedio().setPrecounitario(res.getDouble("r.precoUnitario"));
+				e.getRemedio().setComposiçao(res.getString("r.composicao"));
 				e.setQuantidade(res.getInt("e.quantidade"));
 
 				list.add(e);
@@ -140,9 +141,9 @@ public class EstoqueDAO extends Dao implements BaseDAO<Estoque> {
 		try {
 			PreparedStatement stmt;
 			stmt = conexao.prepareStatement(
-					"Select r.idRemedio,r.nomeComercial,r.laboratorio,r.precoUnitario, e.quantidade from Remedio r join Estoque e on r.idRemedio = e.idRemedio"
+					"Select r.idRemedio,r.nomeComercial,r.laboratorio,r.precoUnitario,r.composicao, e.quantidade from Remedio r join Estoque e on r.idRemedio = e.idRemedio"
 							+ "  where composicao like ?");
-			stmt.setString(1, nome + '%');
+			stmt.setString(1,'%' +nome + '%');
 
 			ResultSet res = stmt.executeQuery();
 			List<Estoque> list = new ArrayList<>();
@@ -152,6 +153,7 @@ public class EstoqueDAO extends Dao implements BaseDAO<Estoque> {
 				e.getRemedio().setNomecomercial(res.getString("r.nomeComercial"));
 				e.getRemedio().setLaboratorio(res.getString("r.laboratorio"));
 				e.getRemedio().setPrecounitario(res.getDouble("r.precoUnitario"));
+				e.getRemedio().setComposiçao(res.getString("r.composicao"));
 				e.setQuantidade(res.getInt("e.quantidade"));
 
 				list.add(e);

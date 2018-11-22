@@ -6,6 +6,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -28,6 +29,7 @@ public class ViewCadastroFuncionario extends JInternalFrame {
 	private Funcionario funcionario = null;
 	private FuncionarioDAO funcionariodao ;
 	private FuncionarioBO funcionariobo;
+	private JComboBox<Object> comboBox;
 
 	/**
 	 * Launch the application.
@@ -125,7 +127,7 @@ public class ViewCadastroFuncionario extends JInternalFrame {
 		getContentPane().add(txtDtAdmissao);
 		txtDtAdmissao.setColumns(10);
 		
-		funcionariocontrol = new FuncionarioController(txtNome, txtCPF, txtDataNascimento, txtDtAdmissao, funcionario, funcionariodao, funcionariobo);
+		funcionariocontrol = new FuncionarioController(txtNome, txtCPF, txtDataNascimento, txtDtAdmissao, funcionario, funcionariodao, funcionariobo,comboBox);
 
 	}
 }

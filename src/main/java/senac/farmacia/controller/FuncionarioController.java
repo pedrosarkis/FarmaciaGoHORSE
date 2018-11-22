@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -22,10 +23,11 @@ public class FuncionarioController {
 	private FuncionarioDAO funcionariodao;
 	private FuncionarioBO funcionariobo;
 	private List<Funcionario> listfunc = null;
+	private JComboBox comboBox;
 
 	public FuncionarioController(JTextField txtNome, JTextField txtCPF, JTextField txtDataNascimento,
 			JTextField txtDtAdmissao, Funcionario funcionario, FuncionarioDAO funcionariodao,
-			FuncionarioBO funcionariobo) {
+			FuncionarioBO funcionariobo,JComboBox<Object> comboBox) {
 		super();
 		this.txtNome = txtNome;
 		this.txtCPF = txtCPF;
@@ -34,6 +36,7 @@ public class FuncionarioController {
 		this.funcionario = new Funcionario();
 		this.funcionariodao = new FuncionarioDAO();
 		this.funcionariobo = new FuncionarioBO();
+		this.comboBox = comboBox;
 	}
 
 	public void salvarAction() {
@@ -77,15 +80,15 @@ public class FuncionarioController {
 		}
 
 	}
+
 	
-	/* Verificar depois com o Vilmar como fazer
-	 * public void popularComboBoxFuncionarioAction () {
+	  public void popularComboBoxFuncionarioAction () {
 		listfunc = funcionariodao.popularComboNomeFuncionario();
-		ComboBoxModel<Object> 
+		DefaultComboBoxModel<Object> comboBox = new DefaultComboBoxModel<>(listfunc.toArray());		
+		comboBox.addElement(listfunc);
 		
 		
-		
-	} */ 
+	} 
 	
 
 }

@@ -5,7 +5,7 @@ public class Remedio {
 	private String laboratorio;
 	private String nomecomercial;
 	private String composiçao;
-	private Double concentraçao;
+	private String concentraçao;
 	private int qdtecomprimidos;
 	private Double precounitario;
 	
@@ -36,10 +36,10 @@ public class Remedio {
 	public void setComposiçao(String composiçao) {
 		this.composiçao = composiçao;
 	}
-	public Double getConcentraçao() {
+	public String getConcentraçao() {
 		return concentraçao;
 	}
-	public void setConcentraçao(Double concentraçao) {
+	public void setConcentraçao(String concentraçao) {
 		this.concentraçao = concentraçao;
 	}
 	public int getQdtecomprimidos() {

@@ -2,10 +2,14 @@ package senac.farmacia.controller;
 
 import java.util.List;
 
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.AbstractDocument.Content;
+
+import com.mysql.cj.x.protobuf.MysqlxResultset.ContentType_DATETIME;
 
 import senac.farmacia.model.bo.ClienteBO;
 import senac.farmacia.model.bo.VendaBO;
@@ -45,7 +49,7 @@ public class VendaController {
 	private List<Estoque> remediosEmEstoque;
 	private List<Remedio> remedios;
 	private EstoqueDAO estoquedao;
-	private Estoque estoque = null;
+	private Estoque estoqueSelecionado = null;
 	private List<Estoque> carrinhoTable;
 	private JTextField txFieldIDProduto;
 	private ClienteBO clientebo;
@@ -87,7 +91,7 @@ public class VendaController {
 		this.remediosEmEstoque = remediosEmEstoque;
 		this.remedios = listremedio;
 		this.estoquedao = new EstoqueDAO();
-		this.estoque = new Estoque();
+		this.estoqueSelecionado = new Estoque();
 		this.carrinhoTable = carrinhoTable;
 		this.txFieldIDProduto = txFieldIDProduto;
 		this.clientebo = new ClienteBO();
@@ -98,15 +102,15 @@ public class VendaController {
 	}
 
 	public void preencherVenda() {
-		estoque = pegaritemtable();
-		txProduto.setText(estoque.getRemedio().getNomecomercial());
-		txPrecoUnitario.setText(String.valueOf(estoque.getRemedio().getPrecounitario()));
-		txQuantidadeDisponivel.setText(String.valueOf(estoque.getQuantidade()));
-		txFieldIDProduto.setText(String.valueOf(estoque.getRemedio().getIdRemedio()));
+		estoqueSelecionado = pegarEstoqueSelecionado();
+		txProduto.setText(estoqueSelecionado.getRemedio().getNomecomercial());
+		txPrecoUnitario.setText(String.valueOf(estoqueSelecionado.getRemedio().getPrecounitario()));
+		txQuantidadeDisponivel.setText(String.valueOf(estoqueSelecionado.getQuantidade()));
+		txFieldIDProduto.setText(String.valueOf(estoqueSelecionado.getRemedio().getIdRemedio()));
 
 	}
 
-	public Estoque pegaritemtable() {
+	public Estoque pegarEstoqueSelecionado() {
 		DefaultTableModel model;
 		model = (DefaultTableModel) table.getModel();
 		int linha = table.getSelectedRow();
@@ -129,11 +133,12 @@ public class VendaController {
 		model.setNumRows(0);
 		for (Estoque e : remediosEmEstoque) {
 			model.addRow(new Object[] { e.getRemedio().getIdRemedio(), e.getRemedio().getNomecomercial(),
-					e.getRemedio().getLaboratorio(), e.getRemedio().getPrecounitario(), e.getQuantidade() });
+					e.getRemedio().getComposiçao(), e.getRemedio().getLaboratorio(), e.getRemedio().getPrecounitario(),
+					e.getQuantidade() });
 		}
 
 	}
-	
+
 	public void pesquisarPorComposicao() {
 		String composicao = txPesquisa.getText();
 		remediosEmEstoque = estoquedao.pesquisarPorComposicao(composicao);
@@ -141,7 +146,8 @@ public class VendaController {
 		model.setNumRows(0);
 		for (Estoque e : remediosEmEstoque) {
 			model.addRow(new Object[] { e.getRemedio().getIdRemedio(), e.getRemedio().getNomecomercial(),
-					e.getRemedio().getLaboratorio(), e.getRemedio().getPrecounitario(), e.getQuantidade() });
+					e.getRemedio().getComposiçao(), e.getRemedio().getLaboratorio(), e.getRemedio().getPrecounitario(),
+					e.getQuantidade() });
 		}
 
 	}
@@ -149,15 +155,15 @@ public class VendaController {
 	public void calcularTotal() {
 
 		if (!txProduto.getText().isEmpty()) {
-			if (this.estoque.getQuantidade() == 0) {
+			if (this.estoqueSelecionado.getQuantidade() == 0) {
 				JOptionPane.showMessageDialog(null, "Medicamento em falta Comunique o Gerente");
 
-			} else if (Integer.parseInt(txQuantidade.getText()) > this.estoque.getQuantidade()) {
-				JOptionPane.showMessageDialog(null,
-						"Quantidade não disponível,coloque uma quantidade até " + this.estoque.getQuantidade());
+			} else if (Integer.parseInt(txQuantidade.getText()) > this.estoqueSelecionado.getQuantidade()) {
+				JOptionPane.showMessageDialog(null, "Quantidade não disponível,coloque uma quantidade até "
+						+ this.estoqueSelecionado.getQuantidade());
 			} else {
 				int quantidade = Integer.parseInt(txQuantidade.getText());
-				Double valor = quantidade * this.estoque.getRemedio().getPrecounitario();
+				Double valor = quantidade * this.estoqueSelecionado.getRemedio().getPrecounitario();
 				txTotal.setText(String.valueOf(valor));
 
 			}
@@ -167,7 +173,6 @@ public class VendaController {
 	public void preencheCarrinho() {
 
 		int qtdeDisponivel = Integer.parseInt(txQuantidadeDisponivel.getText());
-
 		if (!(qtdeDisponivel <= 0)) {
 			DefaultTableModel model = (DefaultTableModel) carrinho.getModel();
 
@@ -235,6 +240,12 @@ public class VendaController {
 			JOptionPane.showMessageDialog(null, resultado);
 
 		}
+
+	}
+
+	public void rightclick() {
+
+		// TODO Auto-generated method stub
 
 	}
 }

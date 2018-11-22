@@ -30,7 +30,7 @@ public class RemedioDAO extends Dao implements BaseDAO<Remedio> {
 			stmt.setString(1, remedio.getLaboratorio());
 			stmt.setString(2, remedio.getNomecomercial());
 			stmt.setString(3, remedio.getComposiçao());
-			stmt.setDouble(4, remedio.getConcentraçao());
+			stmt.setString(4, remedio.getConcentraçao());
 			stmt.setInt(5, remedio.getQdtecomprimidos());
 			stmt.setDouble(6, remedio.getPrecounitario());
 			stmt.executeUpdate();
@@ -50,7 +50,7 @@ public class RemedioDAO extends Dao implements BaseDAO<Remedio> {
 			stmt.setString(1, remedio.getLaboratorio());
 			stmt.setString(2, remedio.getNomecomercial());
 			stmt.setString(3, remedio.getComposiçao());
-			stmt.setDouble(4, remedio.getConcentraçao());
+			stmt.setString(4, remedio.getConcentraçao());
 			stmt.setInt(5, remedio.getQdtecomprimidos());
 			stmt.setDouble(6, remedio.getPrecounitario());
 			stmt.executeUpdate();
@@ -94,7 +94,7 @@ public class RemedioDAO extends Dao implements BaseDAO<Remedio> {
 				r.setComposiçao(res.getString("composicao"));
 				r.setQdtecomprimidos(res.getInt("quantidadeComprimidos"));
 				r.setPrecounitario(res.getDouble("precoUnitario"));
-				r.setConcentraçao(res.getDouble("concentracao"));
+				r.setConcentraçao(res.getString("concentracao"));
 				res.getInt("e.quantidade");
 				
 				
@@ -132,7 +132,7 @@ public class RemedioDAO extends Dao implements BaseDAO<Remedio> {
 			}
 		}
 		
-		public boolean verificarRemedio(String nome, String marca,int quantidade, Double concentracao) {
+		public boolean verificarRemedio(String nome, String marca,int quantidade, String concentracao) {
 			PreparedStatement stmt;
 			boolean existe = false;
 			try {
@@ -140,7 +140,7 @@ public class RemedioDAO extends Dao implements BaseDAO<Remedio> {
 				stmt.setString(1, nome);
 				stmt.setString(2, marca);
 				stmt.setInt(3, quantidade);
-				stmt.setDouble(4, concentracao);
+				stmt.setString(4, concentracao);
 				ResultSet res = stmt.executeQuery();
 				while ( res.next()) {
 					int qtde = res.getInt(1);
