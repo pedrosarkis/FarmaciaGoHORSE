@@ -65,7 +65,7 @@ public class ViewCadastroRemedio extends JInternalFrame {
 		txtMarca = new JTextField();
 		txtMarca.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
+			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
 				if (Character.isDigit(c)) {
 					e.consume();
@@ -83,7 +83,7 @@ public class ViewCadastroRemedio extends JInternalFrame {
 		txtNomeComercial = new JTextField();
 		txtNomeComercial.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
+			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
 				if (Character.isDigit(c) ) {
 					e.consume();
@@ -101,7 +101,7 @@ public class ViewCadastroRemedio extends JInternalFrame {
 		txtComposicao = new JTextField();
 		txtComposicao.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
+			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
 				if (Character.isDigit(c) ) {
 					e.consume();
@@ -119,7 +119,7 @@ public class ViewCadastroRemedio extends JInternalFrame {
 		txtMiligrama = new JTextField();
 		txtMiligrama.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
+			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
 				if (Character.isLetter(c)) {
 					e.consume();
@@ -137,7 +137,7 @@ public class ViewCadastroRemedio extends JInternalFrame {
 		txtQuantidadeComprimido = new JTextField();
 		txtQuantidadeComprimido.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
+			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
 				if (Character.isLetter(c)) {
 					e.consume();
@@ -155,9 +155,9 @@ public class ViewCadastroRemedio extends JInternalFrame {
 		txtPreco = new JTextField();
 		txtPreco.addKeyListener(new KeyAdapter() {
 			@Override
-			public void keyPressed(KeyEvent e) {
+			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (Character.isLetter(c) || txtPreco.getText().equals(',')) {
+				if (Character.isLetter(c)){
 					e.consume();
 
 				}

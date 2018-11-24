@@ -27,7 +27,7 @@ public class FuncionarioController {
 
 	public FuncionarioController(JTextField txtNome, JTextField txtCPF, JTextField txtDataNascimento,
 			JTextField txtDtAdmissao, Funcionario funcionario, FuncionarioDAO funcionariodao,
-			FuncionarioBO funcionariobo,JComboBox<Object> comboBox) {
+			FuncionarioBO funcionariobo, JComboBox<Object> comboBox) {
 		super();
 		this.txtNome = txtNome;
 		this.txtCPF = txtCPF;
@@ -81,14 +81,20 @@ public class FuncionarioController {
 
 	}
 
-	
-	  public void popularComboBoxFuncionarioAction () {
+	public void popularComboBoxFuncionarioAction () {
+		  DefaultComboBoxModel comboModel = (DefaultComboBoxModel) comboBox.getModel();
+		  comboBox.removeAllItems();
 		listfunc = funcionariodao.popularComboNomeFuncionario();
-		DefaultComboBoxModel<Object> comboBox = new DefaultComboBoxModel<>(listfunc.toArray());		
-		comboBox.addElement(listfunc);
+		for ( int i =0; i < listfunc.size(); i++) {
+			listfunc.get(i);
+			comboBox.addItem(listfunc.get(i));
+			
+			
+		}
 		
 		
-	} 
-	
+		
+		
+	}
 
 }

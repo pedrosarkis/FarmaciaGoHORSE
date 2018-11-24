@@ -4,6 +4,8 @@ import java.util.Date;
 
 public class Funcionario {
 
+	
+
 	private int idFuncionario;
 	private String nome;
 	private Date dtNascimento;
@@ -52,6 +54,11 @@ public class Funcionario {
 
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
+	}
+	
+	@Override
+	public String toString() {
+		return  nome ;
 	}
 
 }

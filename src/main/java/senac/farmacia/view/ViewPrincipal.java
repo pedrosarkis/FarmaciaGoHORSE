@@ -19,7 +19,7 @@ import java.beans.PropertyVetoException;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class PrincipalRicardo extends JFrame {
+public class ViewPrincipal extends JFrame {
 
 	/**
 	 * 
@@ -36,7 +36,7 @@ public class PrincipalRicardo extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					PrincipalRicardo frame = new PrincipalRicardo();
+					ViewPrincipal frame = new ViewPrincipal();
 					frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -49,7 +49,7 @@ public class PrincipalRicardo extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public PrincipalRicardo() {
+	public ViewPrincipal() {
 
 		addWindowListener(new WindowAdapter() {
 			@Override
@@ -69,11 +69,11 @@ public class PrincipalRicardo extends JFrame {
 		setJMenuBar(menuBar);
 
 		JMenu mnVenda = new JMenu("Venda         ");
-		mnVenda.setIcon(new ImageIcon(PrincipalRicardo.class.getResource("/icones/icons8-comprar.png")));
+		mnVenda.setIcon(new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-comprar.png")));
 		menuBar.add(mnVenda);
 
 		JMenuItem mntmVenda = new JMenuItem("Venda");
-		mntmVenda.setIcon(new ImageIcon(PrincipalRicardo.class.getResource("/icones/icons8-comprar.png")));
+		mntmVenda.setIcon(new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-comprar.png")));
 		mntmVenda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -85,7 +85,7 @@ public class PrincipalRicardo extends JFrame {
 		mnVenda.add(mntmVenda);
 
 		JMenu mnMedicamento = new JMenu("Medicamento                           ");
-		mnMedicamento.setIcon(new ImageIcon(PrincipalRicardo.class.getResource("/icones/icons8-pílula-48.png")));
+		mnMedicamento.setIcon(new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-pílula-48.png")));
 		menuBar.add(mnMedicamento);
 
 		JMenuItem mntmCadastrarMedicamento = new JMenuItem("Cadastrar Medicamento");
@@ -97,7 +97,7 @@ public class PrincipalRicardo extends JFrame {
 			}
 		});
 		mntmCadastrarMedicamento
-				.setIcon(new ImageIcon(PrincipalRicardo.class.getResource("/icones/icons8-pílula-48.png")));
+				.setIcon(new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-pílula-48.png")));
 		mnMedicamento.add(mntmCadastrarMedicamento);
 
 		JMenuItem mntmPopularEstoque = new JMenuItem("Popular Estoque");
@@ -110,16 +110,16 @@ public class PrincipalRicardo extends JFrame {
 			}
 		});
 		mntmPopularEstoque
-				.setIcon(new ImageIcon(PrincipalRicardo.class.getResource("/icones/icons8-comprimidos-64.png")));
+				.setIcon(new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-comprimidos-64.png")));
 		mnMedicamento.add(mntmPopularEstoque);
 
 		JMenu mnCliente = new JMenu("Cliente                            ");
-		mnCliente.setIcon(new ImageIcon(PrincipalRicardo.class.getResource("/icones/icons8-usuário.png")));
+		mnCliente.setIcon(new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-usuário.png")));
 		menuBar.add(mnCliente);
 
 		JMenuItem mntmCadastrarCliente = new JMenuItem("Cadastrar Cliente");
 		mntmCadastrarCliente.setIcon(
-				new ImageIcon(PrincipalRicardo.class.getResource("/icones/icons8-adicionar-usuário-masculino.png")));
+				new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-adicionar-usuário-masculino.png")));
 		mntmCadastrarCliente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ViewCadastroCliente cadastroCliente = new ViewCadastroCliente();
@@ -132,12 +132,12 @@ public class PrincipalRicardo extends JFrame {
 
 		JMenu mnFuncionrio = new JMenu("Funcionário");
 		mnFuncionrio.setIcon(
-				new ImageIcon(PrincipalRicardo.class.getResource("/icones/icons8-suporte-on-line-filled.png")));
+				new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-suporte-on-line-filled.png")));
 		menuBar.add(mnFuncionrio);
 
 		JMenuItem mntmCadastrarFuncionrio = new JMenuItem("Cadastrar Funcionário");
 		mntmCadastrarFuncionrio.setIcon(
-				new ImageIcon(PrincipalRicardo.class.getResource("/icones/icons8-suporte-on-line-filled.png")));
+				new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-suporte-on-line-filled.png")));
 		mntmCadastrarFuncionrio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ViewCadastroFuncionario cadastroFuncionario = new ViewCadastroFuncionario();

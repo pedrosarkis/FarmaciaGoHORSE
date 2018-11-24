@@ -3,14 +3,11 @@ package senac.farmacia.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
-
-import com.mysql.cj.result.LocalDateTimeValueFactory;
 
 import senac.farmacia.model.bo.ClienteBO;
 import senac.farmacia.model.dao.ClienteDAO;
@@ -25,9 +22,15 @@ public class ClienteController {
 	private ClienteDAO clientedao;
 	private Cliente cliente = null;
 	private ClienteBO clientebo;
+	private JTextField txCartão;
+	private JTextField txCpfc;
+	private List<Cliente> clientes;
+	private JTextField txNomec;
+	private JTextField txId;
 
 	public ClienteController(JTextField txtNome, JTextField txtCPF, JTextField txtDataNascimento,
-			JTextField txCartaoGerado, ClienteDAO clientedao, Cliente cliente, ClienteBO clientebo) {
+			JTextField txCartaoGerado, ClienteDAO clientedao, Cliente cliente, ClienteBO clientebo, JTextField txCartão,
+			JTextField txCpfc, JTextField txNomec,JTextField txId) {
 		super();
 		this.txtNome = txtNome;
 		this.txtCPF = txtCPF;
@@ -36,7 +39,10 @@ public class ClienteController {
 		this.clientedao = new ClienteDAO();
 		this.cliente = new Cliente();
 		this.clientebo = new ClienteBO();
-		;
+		this.txCartão = txCartão;
+		this.txCpfc = txCpfc;
+		this.txNomec = txNomec;
+		this.txId = txId;
 	}
 
 	public void salvarAction() {
@@ -97,6 +103,25 @@ public class ClienteController {
 			JOptionPane.showMessageDialog(null, "O Nome não pode estar vazio");
 		}
 
+	}
+
+	public void buscaCliente() {
+		int cartao = Integer.parseInt(txCartão.getText());
+		cliente = clientedao.listarPorCartao(cartao);
+		txNomec.setText(cliente.getNome());
+		txCpfc.setText(cliente.getCpf());
+		txId.setText(String.valueOf(cliente.getIdCliente()));
+		
+
+	}
+
+	public void buscaClientePorCpf() {
+		String cpf = txCartão.getText();
+		cliente = clientedao.listarPorCPF(cpf);
+		txNomec.setText(cliente.getNome());
+		txCpfc.setText(cliente.getCpf());
+		txId.setText(String.valueOf(cliente.getIdCliente()));
+		
 	}
 
 }

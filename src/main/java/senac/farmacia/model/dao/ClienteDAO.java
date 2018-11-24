@@ -7,6 +7,8 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JOptionPane;
+
 import senac.farmacia.database.Dao;
 import senac.farmacia.model.vo.Cliente;
 import senac.farmacia2.BaseDAO;
@@ -131,24 +133,52 @@ public class ClienteDAO extends Dao implements BaseDAO<Cliente> {
 		}
 	}
 	
-	public List<Cliente> listarPorCartao() {
+	public Cliente listarPorCartao(int cartao) {
 		try {
 			PreparedStatement stmt;
-			stmt = conexao.prepareStatement("Select nome,cpf,dtnascimento from Cliente where ncartao= ?");
+			stmt = conexao.prepareStatement("Select idCliente,nome,cpf,dtnascimento,ncartao from Cliente where ncartao= ?");
+			stmt.setInt(1, cartao);
 			ResultSet res = stmt.executeQuery();
-			List<Cliente> list = new ArrayList<>();
+			Cliente c = new Cliente();
 			while (res.next()) {
-				Cliente c = new Cliente();
+				
 				c.setIdCliente(res.getInt("idCliente"));
 				c.setNome(res.getString("nome"));
 				c.setCpf(res.getString("cpf"));
-				c.setDtnascimento(res.getTime("dtnascimento"));
-				list.add(c);
+				c.setDtnascimento(res.getDate("dtnascimento"));
+				c.setCartao(res.getInt("ncartao"));
+				
 			}
-			return list;
+			return c;
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println(e);
+			JOptionPane.showMessageDialog(null, e);
+			return null;
+
+		}
+
+	}
+	
+	public Cliente listarPorCPF(String cpf) {
+		try {
+			PreparedStatement stmt;
+			stmt = conexao.prepareStatement("Select idCliente,nome,cpf,dtnascimento,ncartao from Cliente where cpf= ?");
+			stmt.setString(1, cpf);
+			ResultSet res = stmt.executeQuery();
+			Cliente c = new Cliente();
+			while (res.next()) {
+				
+				c.setIdCliente(res.getInt("idCliente"));
+				c.setNome(res.getString("nome"));
+				c.setCpf(res.getString("cpf"));
+				c.setDtnascimento(res.getDate("dtnascimento"));
+				c.setCartao(res.getInt("ncartao"));
+				
+			}
+			return c;
+		} catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e);
 			return null;
 
 		}

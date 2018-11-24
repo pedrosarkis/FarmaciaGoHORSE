@@ -17,16 +17,29 @@ public class VendaDAO extends Dao implements BaseDAO<Venda> {
 		try {
 			PreparedStatement stmt;
 			stmt = conexao.prepareStatement(
-					"Insert into Venda (valorVenda,valorVendido, quantidade,idRemedio) values (?,?,?,?)");
+					"Insert into Venda (valorVenda,valorVendido, quantidade,idRemedio,idFuncionario,idCliente) values (?,?,?,?,?,?)");
 			stmt.setDouble(1, t.getValorVenda());
 			stmt.setDouble(2, t.getValorVendido());
 			stmt.setInt(3, t.getQuantidade());
 			stmt.setInt(4, t.getRemedio().getIdRemedio());
+			stmt.setInt(5, t.getFuncionario().getIdFuncionario());
+
+			if (t.getCliente().getIdCliente() == null) {
+				//stmt.setObject(6, null);
+				 stmt.setNull(6, java.sql.Types.INTEGER);
+				 
+				// stmt.setNull(6, java.sql.Types.NULL);
+				 //stmt.setObject(6,t.getCliente(),java.sql.Types.INTEGER);
+				// stmt.setInt(6, t.getCliente().getIdCliente());
+			} else {
+				stmt.setInt(6, t.getCliente().getIdCliente());	
+
+			}
 
 			int retorno = stmt.executeUpdate();
 			return (retorno > 0);
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, e);
+			e.printStackTrace();
 			return false;
 		}
 

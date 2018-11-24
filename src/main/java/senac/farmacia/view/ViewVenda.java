@@ -2,7 +2,6 @@ package senac.farmacia.view;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.PopupMenu;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
@@ -11,8 +10,6 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
@@ -21,28 +18,32 @@ import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.InternalFrameAdapter;
+import javax.swing.event.InternalFrameEvent;
 import javax.swing.table.DefaultTableModel;
 
+import senac.farmacia.controller.ClienteController;
+import senac.farmacia.controller.FuncionarioController;
 import senac.farmacia.controller.VendaController;
 import senac.farmacia.model.bo.ClienteBO;
+import senac.farmacia.model.bo.FuncionarioBO;
 import senac.farmacia.model.bo.VendaBO;
 import senac.farmacia.model.dao.ClienteDAO;
 import senac.farmacia.model.dao.EstoqueDAO;
+import senac.farmacia.model.dao.FuncionarioDAO;
 import senac.farmacia.model.dao.RemedioDAO;
 import senac.farmacia.model.dao.VendaDAO;
 import senac.farmacia.model.vo.Cliente;
 import senac.farmacia.model.vo.Estoque;
+import senac.farmacia.model.vo.Funcionario;
 import senac.farmacia.model.vo.Remedio;
 import senac.farmacia.model.vo.Venda;
-import javax.swing.event.InternalFrameAdapter;
-import javax.swing.event.InternalFrameEvent;
 
 public class ViewVenda extends JInternalFrame {
 	private JTextField txHoraTransaction;
@@ -61,7 +62,7 @@ public class ViewVenda extends JInternalFrame {
 	private JTextField txDinheiro;
 	private JTextField txTroco;
 	private JTextField txNomec;
-	private JTextField txIdadec;
+	private JTextField txIdC;
 	private JTextField txCpfc;
 	private VendaController vendacontrol;
 	private Venda venda;
@@ -79,7 +80,18 @@ public class ViewVenda extends JInternalFrame {
 	private ClienteBO clientebo;
 	private ClienteDAO clientedao;
 	private Cliente cliente;
+	private ClienteController clientecontrol;
 	private VendaBO vendabo;
+	private FuncionarioController funcionariocontroller;
+	private JTextField txtNome;
+	private JTextField txtCPF;
+	private JTextField txtDataNascimento;
+	private JTextField txtDtAdmissao;
+	private Funcionario funcionario = null;
+	private FuncionarioDAO funcionariodao;
+	private FuncionarioBO funcionariobo;
+	private List<Funcionario> listfunc = null;
+	private JTextField txCartaoGerado;
 
 	/**
 	 * Launch the application.
@@ -109,8 +121,8 @@ public class ViewVenda extends JInternalFrame {
 				txPesquisa.requestFocus();
 				txPesquisa.requestFocus(true);
 				txPesquisa.requestFocusInWindow();
-				
-				
+				funcionariocontroller.popularComboBoxFuncionarioAction();
+
 			}
 		});
 		setClosable(true);
@@ -124,14 +136,11 @@ public class ViewVenda extends JInternalFrame {
 		getContentPane().add(lblHoraDaTransao);
 
 		txHoraTransaction = new JTextField();
-		
-		
-		
+
 		txHoraTransaction.setText("");
 		txHoraTransaction.setBounds(156, 27, 139, 20);
 		getContentPane().add(txHoraTransaction);
 		txHoraTransaction.setColumns(10);
-		
 
 		JLabel lblNewLabel = new JLabel("Produto :");
 		lblNewLabel.setBounds(34, 72, 74, 14);
@@ -143,15 +152,18 @@ public class ViewVenda extends JInternalFrame {
 		txProduto.setBounds(156, 69, 205, 20);
 		getContentPane().add(txProduto);
 		txProduto.setColumns(10);
+		final JButton btnFinalizarCompra = new JButton("Finalizar Compra");
 
 		JButton btnAdicionarAoCarrinho = new JButton("Adicionar ao Carrinho");
 		btnAdicionarAoCarrinho.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				vendacontrol.preencheCarrinho();
 				vendacontrol.pegaritemCarrinho();
+				btnFinalizarCompra.setEnabled(true);
 
 			}
 		});
+
 		btnAdicionarAoCarrinho.setBounds(386, 69, 135, 23);
 		getContentPane().add(btnAdicionarAoCarrinho);
 
@@ -231,13 +243,8 @@ public class ViewVenda extends JInternalFrame {
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		scrollPane.setViewportView(table);
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Id Produto", "Nome ", "Composicao", "Laboratorio", "Pre\u00E7o", "Quantidade em estoque"
-			}
-		));
+		table.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "Id Produto", "Nome ", "Composicao",
+				"Laboratorio", "Pre\u00E7o", "Quantidade em estoque" }));
 		table.getColumnModel().getColumn(0).setPreferredWidth(71);
 		table.getColumnModel().getColumn(1).setPreferredWidth(45);
 		table.getColumnModel().getColumn(3).setPreferredWidth(66);
@@ -273,7 +280,7 @@ public class ViewVenda extends JInternalFrame {
 
 			}
 		});
-		btnLimpar.setBounds(441, 148, 86, 23);
+		btnLimpar.setBounds(386, 147, 86, 23);
 		getContentPane().add(btnLimpar);
 
 		JScrollPane scrollPane_1 = new JScrollPane();
@@ -287,23 +294,36 @@ public class ViewVenda extends JInternalFrame {
 		menuCarrinho.add(menuRemoverLinhaSelecionada);
 		menuCarrinho.add(menuRemoverTodasAsLinhas);
 		carrinho.setComponentPopupMenu(menuCarrinho);
-		
-		
-		/*carrinho.addMouseListener(new MouseAdapter() {
+		menuRemoverTodasAsLinhas.addActionListener(new ActionListener() {
+
 			@Override
-			public void mouseClicked(MouseEvent arg0) {
-				if(arg0.getButton() == MouseEvent.BUTTON3) {
-					JMenuItem anItem = new JMenuItem("Excluir");
-					getContentPane().add(anItem);
-					vendacontrol.rightclick();
-				}
-				
+			public void actionPerformed(ActionEvent e) {
+				vendacontrol.limparCarrinhoInteiro();
+
 			}
-		}); */
-		
-				//Fazer right click menu para deletar linha da tabela
-				
-			
+		});
+
+		menuRemoverLinhaSelecionada.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				vendacontrol.limparLinhaSelecionada();
+
+			}
+		});
+
+		/*
+		 * carrinho.addMouseListener(new MouseAdapter() {
+		 * 
+		 * @Override public void mouseClicked(MouseEvent arg0) { if(arg0.getButton() ==
+		 * MouseEvent.BUTTON3) { JMenuItem anItem = new JMenuItem("Excluir");
+		 * getContentPane().add(anItem); vendacontrol.rightclick(); }
+		 * 
+		 * } });
+		 */
+
+		// Fazer right click menu para deletar linha da tabela
+
 		carrinho.setModel(new DefaultTableModel(new Object[][] {},
 				new String[] { "idProduto", "Nome Comercial", "Pre\u00E7o", "Quantidade" }));
 		carrinho.setForeground(Color.DARK_GRAY);
@@ -340,6 +360,7 @@ public class ViewVenda extends JInternalFrame {
 		txDesconto.setBounds(624, 350, 86, 20);
 		getContentPane().add(txDesconto);
 		txDesconto.setColumns(10);
+		txDesconto.setText("0");
 
 		JLabel lblTotal_1 = new JLabel("Total :");
 		lblTotal_1.setBounds(539, 381, 46, 14);
@@ -350,13 +371,12 @@ public class ViewVenda extends JInternalFrame {
 		txTotalFinal.setBounds(624, 378, 86, 20);
 		getContentPane().add(txTotalFinal);
 		txTotalFinal.setColumns(10);
-
-		JButton btnFinalizarCompra = new JButton("Finalizar Compra");
+		txTotalFinal.setText("0");
 
 		btnFinalizarCompra.setBounds(552, 471, 144, 23);
 		getContentPane().add(btnFinalizarCompra);
 
-		JLabel lblCartoFrmacia = new JLabel("Cartão Fármacia");
+		JLabel lblCartoFrmacia = new JLabel("Cliente Farmácia");
 		lblCartoFrmacia.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblCartoFrmacia.setBounds(753, 320, 135, 14);
 		getContentPane().add(lblCartoFrmacia);
@@ -406,12 +426,8 @@ public class ViewVenda extends JInternalFrame {
 		txTroco.setColumns(10);
 
 		JButton btnBuscar = new JButton("Buscar");
-		btnBuscar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
 
-			}
-		});
-		btnBuscar.setBounds(916, 344, 74, 23);
+		btnBuscar.setBounds(916, 344, 84, 23);
 		getContentPane().add(btnBuscar);
 
 		JLabel lblNome = new JLabel("Nome : ");
@@ -424,15 +440,15 @@ public class ViewVenda extends JInternalFrame {
 		getContentPane().add(txNomec);
 		txNomec.setColumns(10);
 
-		JLabel lblIdade = new JLabel("Idade : ");
+		JLabel lblIdade = new JLabel("id : ");
 		lblIdade.setBounds(719, 406, 46, 14);
 		getContentPane().add(lblIdade);
 
-		txIdadec = new JTextField();
-		txIdadec.setEditable(false);
-		txIdadec.setBounds(777, 403, 36, 20);
-		getContentPane().add(txIdadec);
-		txIdadec.setColumns(10);
+		txIdC = new JTextField();
+		txIdC.setEditable(false);
+		txIdC.setBounds(777, 403, 36, 20);
+		getContentPane().add(txIdC);
+		txIdC.setColumns(10);
 
 		JLabel lblCpf = new JLabel("CPF : ");
 		lblCpf.setBounds(719, 433, 46, 14);
@@ -440,7 +456,7 @@ public class ViewVenda extends JInternalFrame {
 
 		txCpfc = new JTextField();
 		txCpfc.setEditable(false);
-		txCpfc.setBounds(884, 430, 46, 20);
+		txCpfc.setBounds(813, 430, 46, 20);
 		getContentPane().add(txCpfc);
 		txCpfc.setBounds(753, 430, 177, 20);
 		getContentPane().add(txCpfc);
@@ -491,6 +507,9 @@ public class ViewVenda extends JInternalFrame {
 		txFieldIDProduto.setBounds(154, 179, 25, 20);
 		getContentPane().add(txFieldIDProduto);
 		txFieldIDProduto.setColumns(10);
+
+		btnFinalizarCompra.setEnabled(false);
+
 		btnFinalizarCompra.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				vendacontrol.salvarAction();
@@ -501,7 +520,7 @@ public class ViewVenda extends JInternalFrame {
 		rdbtnNomeComercial.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					rdbtnNomeComercial.setSelected(true);
 				}
 			}
@@ -513,7 +532,7 @@ public class ViewVenda extends JInternalFrame {
 		rdbtnComposio.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ENTER) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 					rdbtnComposio.setSelected(true);
 				}
 			}
@@ -541,7 +560,32 @@ public class ViewVenda extends JInternalFrame {
 
 				} else {
 					vendacontrol.pesquisarPorComposicao();
-					
+
+				}
+
+			}
+		});
+
+		JRadioButton rdbtnCpf = new JRadioButton("Cpf");
+		rdbtnCpf.setBounds(1006, 349, 102, 23);
+		getContentPane().add(rdbtnCpf);
+
+		final JRadioButton rdbtnNCarto = new JRadioButton("Nº Cartão");
+		rdbtnNCarto.setBounds(1004, 377, 139, 23);
+		getContentPane().add(rdbtnNCarto);
+
+		ButtonGroup buttonGroup2 = new javax.swing.ButtonGroup();
+		buttonGroup2.add(rdbtnCpf);
+		buttonGroup2.add(rdbtnNCarto);
+		rdbtnCpf.setSelected(true);
+
+		btnBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (rdbtnNCarto.isSelected()) {
+					clientecontrol.buscaCliente();
+
+				} else {
+					clientecontrol.buscaClientePorCpf();
 				}
 
 			}
@@ -549,9 +593,28 @@ public class ViewVenda extends JInternalFrame {
 
 		vendacontrol = new VendaController(txHoraTransaction, txProduto, txPrecoUnitario, txQuantidadeDisponivel,
 				txQuantidade, txTotal, table, txPesquisa, carrinho, txSubtotal, txDesconto, txTotalFinal, txCartão,
-				txDinheiro, txTroco, txNomec, txIdadec, txCpfc, remedio, remediodao, venda, vendadao,
-				listremedioestoque, listremedio, estoquedao, estoque, carrinhoTable, txFieldIDProduto, clientebo,
-				clientedao, cliente, vendabo);
+				txDinheiro, txTroco, txNomec, txIdC, txCpfc, remedio, remediodao, venda, vendadao, listremedioestoque,
+				listremedio, estoquedao, estoque, carrinhoTable, txFieldIDProduto, clientebo, clientedao, cliente,
+				vendabo, comboBox);
+
+		funcionariocontroller = new FuncionarioController(txtNome, txtCPF, txtDataNascimento, txtDtAdmissao,
+				funcionario, funcionariodao, funcionariobo, comboBox);
+
+		clientecontrol = new ClienteController(txtNome, txtCPF, txtDataNascimento, txCartaoGerado, clientedao, cliente,
+				clientebo, txCartão, txCpfc, txNomec, txIdC);
+
+		JButton btnLimpar_1 = new JButton("Limpar");
+		btnLimpar_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				txNomec.setText("");
+				txIdC.setText("");
+				txCpfc.setText("");
+				txCartão.setText("");
+
+			}
+		});
+		btnLimpar_1.setBounds(868, 471, 89, 23);
+		getContentPane().add(btnLimpar_1);
 
 	}
 

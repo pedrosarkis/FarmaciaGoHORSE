@@ -47,7 +47,10 @@ public class ClienteBO {
 		return false;
 	}
 
-	public List<Cliente> listarTodos() {
+	public String listarTodos() {
+		String mensagemRetorno = "";
+		
+		
 		
 		return null;
 	}

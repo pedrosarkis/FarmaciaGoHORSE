@@ -68,7 +68,7 @@ public class FuncionarioDAO extends Dao implements BaseDAO<Funcionario> {
 	public List<Funcionario> listarTodos() {
 		try {
 			PreparedStatement stmt;
-			stmt = conexao.prepareStatement("Select idFuncionario,nome,cpf,dtnascimento from Funcionario");
+			stmt = conexao.prepareStatement("Select idFuncionario,nome,cpf from Funcionario");
 			ResultSet res = stmt.executeQuery();
 			List<Funcionario> list = new ArrayList<>();
 			while (res.next()) {
@@ -92,13 +92,14 @@ public class FuncionarioDAO extends Dao implements BaseDAO<Funcionario> {
 	public List<Funcionario> popularComboNomeFuncionario() {
 		try {
 			PreparedStatement stmt;
-			stmt = conexao.prepareStatement("Select nome from Funcionario");
+			stmt = conexao.prepareStatement("Select idFuncionario,nome from Funcionario");
 			ResultSet res = stmt.executeQuery();
 			List<Funcionario> list = new ArrayList<>();
 			while (res.next()) {
 				Funcionario f = new Funcionario();
 				
 				f.setNome(res.getString("nome"));
+				f.setIdFuncionario(res.getInt("idFuncionario"));
 				
 				
 				
@@ -107,7 +108,7 @@ public class FuncionarioDAO extends Dao implements BaseDAO<Funcionario> {
 			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println(e);
+			
 			return null;
 
 		}

@@ -35,6 +35,10 @@ public class ViewCadastroCliente extends JInternalFrame {
 	private Cliente cliente;
 	private ClienteController clientecontrol =null;
 	private ClienteBO clientebo ;
+	private JTextField txCartão;
+	private JTextField txCpfc;
+	private JTextField txNomec;
+	private JTextField txId;
 
 	/**
 	 * Launch the application.
@@ -159,7 +163,7 @@ public class ViewCadastroCliente extends JInternalFrame {
 		btnGerarCartao.setBounds(88, 195, 117, 52);
 		getContentPane().add(btnGerarCartao);
 		
-		clientecontrol = new ClienteController(txtNome, txtCPF, txtDataNascimento, txCartaoGerado, clientedao, cliente,clientebo);
+		clientecontrol = new ClienteController(txtNome, txtCPF, txtDataNascimento, txCartaoGerado, clientedao, cliente,clientebo,txCartão,txCpfc,txNomec,txId);
 
 	}
 }
