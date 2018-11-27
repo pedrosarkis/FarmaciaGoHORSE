@@ -206,7 +206,11 @@ public class VendaController {
 						int total = qtdeatual + qtdeExistente;
 						if(!((qtdeExistente + qtdeatual) > Integer.parseInt(txQuantidadeDisponivel.getText()))) {
 						
-						int qtdeNova = qtdeatual + Integer.parseInt((String) carrinho.getValueAt(i, 3));
+						// Forma antiga somando quantidade atual a quantidade anterior
+						//int qtdeNova = qtdeatual + Integer.parseInt((String) carrinho.getValueAt(i, 3));
+						
+						int qtdeNova = qtdeatual;
+						
 						carrinho.setValueAt(String.valueOf(qtdeNova), i, 3);
 					} else {
 						JOptionPane.showMessageDialog(null, "Impossível adicionar " + qtdeatual + " pois totalizará " + total + " e só temos " + txQuantidadeDisponivel.getText()  );

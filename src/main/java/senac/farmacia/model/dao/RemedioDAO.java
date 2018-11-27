@@ -95,9 +95,6 @@ public class RemedioDAO extends Dao implements BaseDAO<Remedio> {
 				r.setQdtecomprimidos(res.getInt("quantidadeComprimidos"));
 				r.setPrecounitario(res.getDouble("precoUnitario"));
 				r.setConcentraçao(res.getString("concentracao"));
-				res.getInt("e.quantidade");
-				
-				
 				list.add(r);
 
 			}

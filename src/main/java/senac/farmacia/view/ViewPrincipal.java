@@ -5,6 +5,12 @@ import java.awt.EventQueue;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -13,11 +19,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.beans.PropertyVetoException;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+
+import senac.farmacia.model.vo.Remedio;
 
 public class ViewPrincipal extends JFrame {
 
@@ -63,7 +66,7 @@ public class ViewPrincipal extends JFrame {
 		setBackground(SystemColor.textHighlight);
 		setTitle("FARMÁCIA");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 777, 448);
+		setBounds(100, 100, 993, 448);
 
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
@@ -147,6 +150,47 @@ public class ViewPrincipal extends JFrame {
 			}
 		});
 		mnFuncionrio.add(mntmCadastrarFuncionrio);
+		
+		JMenu mnRelatorio = new JMenu("Relatório                    ");
+		mnRelatorio.setIcon(new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-documento-regular.png")));
+		menuBar.add(mnRelatorio);
+		
+		JMenuItem mntmMedicamento = new JMenuItem("Medicamento");
+		mntmMedicamento.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ViewRelatorioMedicamento relatorioMedicamento = new ViewRelatorioMedicamento();
+				setContentPane(relatorioMedicamento);
+				relatorioMedicamento.setVisible(true);
+				List<Remedio> remedios = new ArrayList<>();
+				String caminho = null;
+				//gerarPlanilha.gerarPlanilhaMedicamentos(remedios, caminho);
+				
+				
+				
+			}
+		});
+		mntmMedicamento.setIcon(new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-comprimidos-48.png")));
+		mnRelatorio.add(mntmMedicamento);
+		
+		
+		JMenuItem mntmRelatorioVenda = new JMenuItem("Relatório de Venda");
+		mntmRelatorioVenda.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ViewRelatorioVenda relatorioVenda;
+				try {
+					relatorioVenda = new ViewRelatorioVenda();
+					setContentPane(relatorioVenda);
+					relatorioVenda.setVisible(true);
+				} catch (Exception e1) {
+					
+					e1.printStackTrace();
+				}
+				
+				
+			}
+		});
+		mntmRelatorioVenda.setIcon(new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-gráfico.png")));
+		mnRelatorio.add(mntmRelatorioVenda);
 
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.BLUE);

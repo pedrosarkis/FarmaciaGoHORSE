@@ -1,12 +1,16 @@
 package senac.farmacia.model.dao;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JOptionPane;
 
 import senac.farmacia.database.Dao;
+import senac.farmacia.model.vo.Remedio;
 import senac.farmacia.model.vo.Venda;
 import senac.farmacia2.BaseDAO;
 
@@ -102,6 +106,27 @@ public class VendaDAO extends Dao implements BaseDAO<Venda> {
 	public List<Venda> listarTodos() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public List<Venda> listarTodosDeAcordoComData(Date dataInicio, Date dataFim) {
+		try {
+			PreparedStatement stmt;
+			stmt = conexao.prepareStatement(
+					"SELECT * FROM Venda");
+			ResultSet res = stmt.executeQuery();
+			List<Venda> list = new ArrayList<>();
+			
+			while (res.next()) {
+				Venda venda = new Venda();
+				
+				list.add(venda);
+
+			}
+			return list;
+
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 }
