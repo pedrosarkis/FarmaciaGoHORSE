@@ -106,17 +106,19 @@ public class VendaDAO extends Dao implements BaseDAO<Venda> {
 	public List<Venda> listarTodos() {
 		try {
 			PreparedStatement stmt;
-			stmt = conexao.prepareStatement("SELECT "
-					+ "venda.idVenda, " + 
-					"	remedio.laboratorio, " + 
-					"	remedio.nomeComercial, " + 
-					"	remedio.composicao," + 
-					"	remedio.concentracao," + 
-					"    venda.valorVenda, " + 
-					"	venda.valorVendido, " + 
-					"	venda.quantidade " + 
-					"FROM Venda venda inner join Estoque estoque "
-					+ "inner join Remedio remedio where venda.idRemedio =  estoque.idRemedio and estoque.idRemedio = remedio.idRemedio;");
+			/*
+			 * stmt = conexao.prepareStatement("SELECT " + "venda.idVenda, " +
+			 * "	remedio.laboratorio, " + "	remedio.nomeComercial, " +
+			 * "	remedio.composicao," + "	remedio.concentracao," +
+			 * "    venda.valorVenda, " + "	venda.valorVendido, " + "	venda.quantidade " +
+			 * "venda.idCliente" + "FROM Venda venda inner join Estoque estoque " +
+			 * "inner join Remedio remedio where venda.idRemedio =  estoque.idRemedio and estoque.idRemedio = remedio.idRemedio;"
+			 * );
+			 */
+
+			stmt = conexao.prepareStatement(
+					"Select v.idVenda,r.laboratorio,r.nomeComercial,r.Composicao,r.concentracao,v.valorVenda,v.ValorVendido,v.Quantidade,c.nome from venda v join remedio r on v.idRemedio = r.idRemedio left join "
+					+ "cliente c on v.idCliente = c.idCliente order by idVenda");
 			ResultSet res = stmt.executeQuery();
 			List<Venda> list = new ArrayList<>();
 
@@ -130,7 +132,8 @@ public class VendaDAO extends Dao implements BaseDAO<Venda> {
 				venda.setValorVenda(res.getDouble("valorVenda"));
 				venda.setValorVendido(res.getDouble("valorVendido"));
 				venda.setQuantidade(res.getInt("quantidade"));
-				
+				venda.getCliente().setNome(res.getString("c.nome"));
+
 				list.add(venda);
 
 			}

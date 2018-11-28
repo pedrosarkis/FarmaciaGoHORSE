@@ -13,7 +13,7 @@ import org.apache.poi.ss.usermodel.Row;
 public class GerarPlanilhaVenda {
 	
 	public void gerarPlanilhaVendas(List<Venda> vendas, String caminho) {
-		String[] colunasPlanilha = { "id", "Laboratório", "NomeComercial", "Composicao", "Concentracao", "ValorVenda ", "ValorVendido","quantidade"};
+		String[] colunasPlanilha = { "id", "Laboratório", "NomeComercial", "Composicao", "Concentracao", "ValorVenda ", "ValorVendido","quantidade","Cliente"};
 		
 		HSSFWorkbook planilha = new HSSFWorkbook();
 		
@@ -37,6 +37,7 @@ public class GerarPlanilhaVenda {
 			novaLinha.createCell(5).setCellValue(venda.getValorVenda());
 			novaLinha.createCell(6).setCellValue(venda.getValorVendido());
 			novaLinha.createCell(7).setCellValue(venda.getQuantidade());
+			novaLinha.createCell(8).setCellValue(venda.getCliente().getIdCliente());
 			
 		}
 		

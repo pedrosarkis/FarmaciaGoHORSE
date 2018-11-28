@@ -33,9 +33,6 @@ public class ViewRelatorioVenda extends JInternalFrame{
 		scrollPane.setBounds(6, 107, 610, 189);
 		getContentPane().add(scrollPane);
 		
-		table = new JTable();
-		scrollPane.setViewportView(table);
-		
 		JLabel lblRelatorioVenda = new JLabel("Relatório venda");
 		lblRelatorioVenda.setBounds(67, 33, 142, 16);
 		getContentPane().add(lblRelatorioVenda);
@@ -82,6 +79,7 @@ public class ViewRelatorioVenda extends JInternalFrame{
 		defaultTableModel.addColumn("valorVenda");
 		defaultTableModel.addColumn("valorVendido");
 		defaultTableModel.addColumn("quantidade");
+		defaultTableModel.addColumn("Cliente");
 		
 		table = new JTable(defaultTableModel);
 		
@@ -114,7 +112,8 @@ public class ViewRelatorioVenda extends JInternalFrame{
 							venda.getRemedio().getConcentraçao(),
 							venda.getValorVenda(), 
 							venda.getValorVendido(),
-							venda.getQuantidade()
+							venda.getQuantidade(),
+							venda.getCliente().getNome()
 						
 							
 					});

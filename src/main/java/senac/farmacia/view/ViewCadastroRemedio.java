@@ -5,16 +5,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.ToolTipManager;
 
 import senac.farmacia.controller.RemedioController;
 import senac.farmacia.model.bo.RemedioBO;
 import senac.farmacia.model.dao.RemedioDAO;
 import senac.farmacia.model.vo.Remedio;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 // Tela Ricardo 
 public class ViewCadastroRemedio extends JInternalFrame {
@@ -22,7 +29,7 @@ public class ViewCadastroRemedio extends JInternalFrame {
 	/**
 	 * 
 	 */
-	
+
 	private JTextField txtMarca;
 	private JTextField txtNomeComercial;
 	private JTextField txtComposicao;
@@ -33,6 +40,10 @@ public class ViewCadastroRemedio extends JInternalFrame {
 	private RemedioController remediocontrol;
 	private Remedio remedio = null;
 	private RemedioBO remediobo;
+	private JTextField txPesquisaRemedio;
+	private JTable medicamentos;
+	private List<Remedio> medicamentosCadastrados;
+	private Remedio remedioSelecionado;
 
 	/**
 	 * Launch the application.
@@ -55,7 +66,7 @@ public class ViewCadastroRemedio extends JInternalFrame {
 	 */
 	public ViewCadastroRemedio() {
 		setClosable(true);
-		setBounds(100, 100, 602, 419);
+		setBounds(100, 100, 1139, 806);
 		getContentPane().setLayout(null);
 
 		JLabel lblMarca = new JLabel("Laboratório : ");
@@ -69,7 +80,7 @@ public class ViewCadastroRemedio extends JInternalFrame {
 				char c = e.getKeyChar();
 				if (Character.isDigit(c)) {
 					e.consume();
-				} 
+				}
 			}
 		});
 		txtMarca.setBounds(210, 25, 351, 26);
@@ -85,9 +96,9 @@ public class ViewCadastroRemedio extends JInternalFrame {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (Character.isDigit(c) ) {
+				if (Character.isDigit(c)) {
 					e.consume();
-				} 
+				}
 			}
 		});
 		txtNomeComercial.setBounds(210, 63, 351, 26);
@@ -103,9 +114,9 @@ public class ViewCadastroRemedio extends JInternalFrame {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (Character.isDigit(c) ) {
+				if (Character.isDigit(c)) {
 					e.consume();
-				} 
+				}
 			}
 		});
 		txtComposicao.setBounds(210, 103, 351, 26);
@@ -123,7 +134,7 @@ public class ViewCadastroRemedio extends JInternalFrame {
 				char c = e.getKeyChar();
 				if (Character.isLetter(c)) {
 					e.consume();
-				} 
+				}
 			}
 		});
 		txtMiligrama.setBounds(210, 147, 130, 26);
@@ -157,7 +168,7 @@ public class ViewCadastroRemedio extends JInternalFrame {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
-				if (Character.isLetter(c)){
+				if (Character.isLetter(c)) {
 					e.consume();
 
 				}
@@ -174,12 +185,62 @@ public class ViewCadastroRemedio extends JInternalFrame {
 				remediocontrol.SalvarAction();
 			}
 		});
-		btnSalvar.setBounds(208, 312, 117, 55);
+		btnSalvar.setBounds(44, 322, 117, 55);
 		getContentPane().add(btnSalvar);
-		
-		remediocontrol = new RemedioController(txtMarca, txtNomeComercial, txtComposicao, txtMiligrama, txtQuantidadeComprimido, txtPreco, remediodao, remedio,remediobo);
-				
-	
+
+		JLabel lblPesquisarMedicamento = new JLabel("Pesquisar Medicamento : ");
+		lblPesquisarMedicamento.setBounds(622, 31, 136, 14);
+		getContentPane().add(lblPesquisarMedicamento);
+
+		txPesquisaRemedio = new JTextField();
+		txPesquisaRemedio.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				remediocontrol.pesquisarRemedioPorNome();
+			}
+		});
+		txPesquisaRemedio.setBounds(764, 28, 237, 20);
+		getContentPane().add(txPesquisaRemedio);
+		txPesquisaRemedio.setColumns(10);
+
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(592, 108, 483, 361);
+		getContentPane().add(scrollPane);
+
+		medicamentos = new JTable();
+		medicamentos.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				remediocontrol.preencherRetornoRemedio();
+			}
+		});
+		medicamentos.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "Nome Comercial", "Laboratorio",
+				"Valor", "Quantidade comprimidos", "Composicao", "Concentracao" }));
+		scrollPane.setViewportView(medicamentos);
+
+		JButton btnEditar = new JButton("Editar");
+		btnEditar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				remediocontrol.alterarRemedio();
+			}
+		});
+		btnEditar.setBounds(184, 322, 117, 55);
+		getContentPane().add(btnEditar);
+
+		JButton btnExcluir = new JButton("Excluir");
+		ToolTipManager.sharedInstance().setInitialDelay(0);
+		btnExcluir.setToolTipText("SÓ SERÁ POSSÍVEL EXCLUIR MEDICAMENTOS QUE NÃO ESTÃO NO ESTOQUE.\r\n");
+		btnExcluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				remediocontrol.excluirMedicamento();
+			}
+		});
+		btnExcluir.setBounds(311, 322, 117, 55);
+		getContentPane().add(btnExcluir);
+
+		remediocontrol = new RemedioController(txtMarca, txtNomeComercial, txtComposicao, txtMiligrama,
+				txtQuantidadeComprimido, txtPreco, remediodao, remedio, remediobo, medicamentos,
+				medicamentosCadastrados, remedioSelecionado, txPesquisaRemedio);
 
 	}
 }

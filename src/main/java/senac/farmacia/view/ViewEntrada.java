@@ -114,8 +114,8 @@ public class ViewEntrada extends JInternalFrame {
 		getContentPane().add(txComposicao);
 		txComposicao.setColumns(10);
 
-		JLabel lblValorComprado = new JLabel("Valor Comprado : ");
-		lblValorComprado.setBounds(10, 439, 130, 14);
+		JLabel lblValorComprado = new JLabel("Valor Unitário de Compra: ");
+		lblValorComprado.setBounds(10, 439, 163, 14);
 		getContentPane().add(lblValorComprado);
 
 		txValorComprado = new JTextField();
@@ -128,7 +128,7 @@ public class ViewEntrada extends JInternalFrame {
 				}
 			}
 		});
-		txValorComprado.setBounds(151, 436, 86, 20);
+		txValorComprado.setBounds(183, 436, 86, 20);
 		getContentPane().add(txValorComprado);
 		txValorComprado.setColumns(10);
 

@@ -22,7 +22,6 @@ import senac.farmacia.model.vo.Venda;
 
 public class VendaController {
 
-	private JTextField textField;
 	private JTextField txProduto;
 	private JTextField txPrecoUnitario;
 	private JTextField txQuantidadeDisponivel;
@@ -57,16 +56,16 @@ public class VendaController {
 	private JComboBox comboBox;
 	private Funcionario funcionario = null;
 
-	public VendaController(JTextField textField, JTextField txProduto, JTextField txPrecoUnitario,
-			JTextField txQuantidadeDisponivel, JTextField txQuantidade, JTextField txTotal, JTable table,
-			JTextField txPesquisa, JTable carrinho, JTextField txSubtotal, JTextField txDesconto,
-			JTextField txTotalFinal, JTextField txCartão, JTextField txDinheiro, JTextField txTroco, JTextField txNomec,
-			JTextField txIdC, JTextField txCpfc, Remedio remedio, RemedioDAO remediodao, Venda venda, VendaDAO vendadao,
-			List<Estoque> listremedioestoque, List<Remedio> listremedio, EstoqueDAO estoquedao, Estoque estoque,
-			List<Estoque> carrinhoTable, JTextField txFieldIDProduto, ClienteBO clientebo, ClienteDAO clientedao,
-			Cliente cliente, VendaBO vendabo, JComboBox comboBox) {
+	public VendaController(JTextField txProduto, JTextField txPrecoUnitario, JTextField txQuantidadeDisponivel,
+			JTextField txQuantidade, JTextField txTotal, JTable table, JTextField txPesquisa, JTable carrinho,
+			JTextField txSubtotal, JTextField txDesconto, JTextField txTotalFinal, JTextField txCartão,
+			JTextField txDinheiro, JTextField txTroco, JTextField txNomec, JTextField txIdC, JTextField txCpfc,
+			Remedio remedio, RemedioDAO remediodao, Venda venda, VendaDAO vendadao, List<Estoque> listremedioestoque,
+			List<Remedio> listremedio, EstoqueDAO estoquedao, Estoque estoque, List<Estoque> carrinhoTable,
+			JTextField txFieldIDProduto, ClienteBO clientebo, ClienteDAO clientedao, Cliente cliente, VendaBO vendabo,
+			JComboBox comboBox) {
 		super();
-		this.textField = textField;
+
 		this.txProduto = txProduto;
 		this.txPrecoUnitario = txPrecoUnitario;
 		this.txQuantidadeDisponivel = txQuantidadeDisponivel;
@@ -179,6 +178,8 @@ public class VendaController {
 
 	// Adiciona ITEM AO CARRINHO Feito com maestria
 	public void preencheCarrinho() {
+		
+		
 
 		boolean existe = false;
 
@@ -199,29 +200,28 @@ public class VendaController {
 
 			} else {
 				for (int i = 0; i < carrinho.getRowCount(); i++) {
-					if (txFieldIDProduto.getText().equals(carrinho.getValueAt(i, 0))) {					
+					if (txFieldIDProduto.getText().equals(carrinho.getValueAt(i, 0))) {
 
 						int qtdeatual = Integer.parseInt(txQuantidade.getText());
 						int qtdeExistente = Integer.parseInt((String) carrinho.getValueAt(i, 3));
 						int total = qtdeatual + qtdeExistente;
-						if(!((qtdeExistente + qtdeatual) > Integer.parseInt(txQuantidadeDisponivel.getText()))) {
-						
-						// Forma antiga somando quantidade atual a quantidade anterior
-						//int qtdeNova = qtdeatual + Integer.parseInt((String) carrinho.getValueAt(i, 3));
-						
-						int qtdeNova = qtdeatual;
-						
-						carrinho.setValueAt(String.valueOf(qtdeNova), i, 3);
-					} else {
-						JOptionPane.showMessageDialog(null, "Impossível adicionar " + qtdeatual + " pois totalizará " + total + " e só temos " + txQuantidadeDisponivel.getText()  );
+						if (!((qtdeExistente + qtdeatual) > Integer.parseInt(txQuantidadeDisponivel.getText()))) {
+
+							int qtdeNova = qtdeatual + Integer.parseInt((String) carrinho.getValueAt(i, 3));
+							carrinho.setValueAt(String.valueOf(qtdeNova), i, 3);
+							
+						} else {
+							JOptionPane.showMessageDialog(null, "Impossível adicionar " + qtdeatual
+									+ " pois totalizará " + total + " e só temos " + txQuantidadeDisponivel.getText());
+
+						}
 
 					}
-
 				}
-			}
 
+			}
 		}
-		}
+		
 
 		/*
 		 * int qtdeDisponivel = Integer.parseInt(txQuantidadeDisponivel.getText()); if
@@ -259,14 +259,19 @@ public class VendaController {
 
 	// calcula o desconto se houver cliente retornado na pesqusisa
 	public void calculaDesconto() {
+		
+		if(carrinho.getRowCount() >0) {
 
 		if (!txNomec.getText().trim().isEmpty()) {
 
 			double subtotal = Double.parseDouble(txSubtotal.getText());
-			double totalComDesconto = subtotal - (subtotal * 10) / 100;
-			txTotal.setText(String.valueOf(totalComDesconto));
+			double totalComDesconto = subtotal - (subtotal/10);
+			txTotalFinal.setText(String.valueOf(totalComDesconto));
+			
+			txDesconto.setText(String.valueOf(subtotal/10));
 
 		}
+	}
 	}
 
 	/*
@@ -289,30 +294,68 @@ public class VendaController {
 		 * 
 		 * 
 		 */
+		calculaDesconto();
+		int resultdialog = JOptionPane.showConfirmDialog(null, "Deseja confirmar a Venda?", "Confirmação de Venda",
+				JOptionPane.YES_NO_OPTION);
+		if (resultdialog == JOptionPane.YES_OPTION) {
 
-		for (int i = 0; i < carrinho.getRowCount(); i++) {
+			if (txNomec.getText().trim().isEmpty()) {
+				for (int i = 0; i < carrinho.getRowCount(); i++) {
 
-			venda.getRemedio().setIdRemedio(Integer.parseInt((String) carrinho.getValueAt(i, 0)));
-			venda.setQuantidade(Integer.parseInt((String) carrinho.getValueAt(i, 3)));
+					venda.getRemedio().setIdRemedio(Integer.parseInt((String) carrinho.getValueAt(i, 0)));
+					venda.setQuantidade(Integer.parseInt((String) carrinho.getValueAt(i, 3)));
 
-			venda.setValorVendido(Double.parseDouble((String) carrinho.getValueAt(i, 2)));
+					venda.setValorVendido(Double.parseDouble((String) carrinho.getValueAt(i, 2)));
 
-			venda.setValorVenda(Double.parseDouble((String) carrinho.getValueAt(i, 2))
-					* Double.parseDouble((String) carrinho.getValueAt(i, 3)));
+					venda.setValorVenda(Double.parseDouble((String) carrinho.getValueAt(i, 2))
+							* Double.parseDouble((String) carrinho.getValueAt(i, 3)));
 
-			Funcionario funcionario = (Funcionario) comboBox.getSelectedItem();
-			venda.getFuncionario().setIdFuncionario(funcionario.getIdFuncionario());
+					Funcionario funcionario = (Funcionario) comboBox.getSelectedItem();
+					venda.getFuncionario().setIdFuncionario(funcionario.getIdFuncionario());
 
-			if (!txIdC.getText().trim().isEmpty()) {
-				venda.getCliente().setIdCliente(Integer.parseInt(txIdC.getText()));
+					if (!txIdC.getText().trim().isEmpty()) {
+						venda.getCliente().setIdCliente(Integer.parseInt(txIdC.getText()));
+
+					} else {
+						venda.getCliente().setIdCliente(null);
+
+					}
+
+					String resultado = vendabo.inserir(venda);
+					JOptionPane.showMessageDialog(null, resultado);
+
+				}
 
 			} else {
-				venda.getCliente().setIdCliente(null);
+				for (int i = 0; i < carrinho.getRowCount(); i++) {
+
+					double valorDesconto = (Double.parseDouble((String) carrinho.getValueAt(i, 2))
+							* Double.parseDouble((String) carrinho.getValueAt(i, 3)))
+							- (Double.parseDouble((String) carrinho.getValueAt(i, 2))
+									* Double.parseDouble((String) carrinho.getValueAt(i, 3))) / 10;
+					venda.getRemedio().setIdRemedio(Integer.parseInt((String) carrinho.getValueAt(i, 0)));
+					venda.setQuantidade(Integer.parseInt((String) carrinho.getValueAt(i, 3)));
+					venda.setValorVendido(Double.parseDouble((String) carrinho.getValueAt(i, 2)));
+
+					venda.setValorVenda(valorDesconto);
+
+					Funcionario funcionario = (Funcionario) comboBox.getSelectedItem();
+					venda.getFuncionario().setIdFuncionario(funcionario.getIdFuncionario());
+
+					if (!txIdC.getText().trim().isEmpty()) {
+						venda.getCliente().setIdCliente(Integer.parseInt(txIdC.getText()));
+
+					} else {
+						venda.getCliente().setIdCliente(null);
+
+					}
+
+					String resultado = vendabo.inserir(venda);
+					JOptionPane.showMessageDialog(null, resultado);
+
+				}
 
 			}
-
-			String resultado = vendabo.inserir(venda);
-			JOptionPane.showMessageDialog(null, resultado);
 
 		}
 
@@ -351,9 +394,10 @@ public class VendaController {
 
 	}
 
-	public void rightclick() {
+	public void calcularTroco() {
 
-		// TODO Auto-generated method stub
+	 double troco = Double.parseDouble(txDinheiro.getText()) - Double.parseDouble(txTotalFinal.getText());
+	 txTroco.setText(String.valueOf(troco));
 
 	}
 }

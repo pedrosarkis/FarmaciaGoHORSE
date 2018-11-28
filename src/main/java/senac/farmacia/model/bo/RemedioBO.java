@@ -23,5 +23,30 @@ public class RemedioBO {
 		return mensagemRetorno;
 	}
 	
+	public String excluir (Remedio remedio) {
+		String mensagemRetorno = "";
+		
+		if(remediodao.excluir(remedio)) {
+			mensagemRetorno = "Remedio Excluído com sucesso"; 
+		} else {
+			mensagemRetorno = "Remedio já existe no Estoque, impossível excluir";
+		}
+		return mensagemRetorno;
+	}
+	
+	public String alterar ( Remedio remedio) {
+		String mensagemRetorno = "";
+		
+		if (remediodao.alterar(remedio)) {
+			mensagemRetorno = "Remédio Alterado com Sucesso";
+		} else {
+			mensagemRetorno = "Erro ao alterar Remédio";
+		}
+		
+		return mensagemRetorno;
+			
+		
+	}
+	
 
 }

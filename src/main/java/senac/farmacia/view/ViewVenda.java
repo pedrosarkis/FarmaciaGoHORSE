@@ -25,6 +25,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.table.DefaultTableModel;
@@ -47,7 +49,7 @@ import senac.farmacia.model.vo.Remedio;
 import senac.farmacia.model.vo.Venda;
 
 public class ViewVenda extends JInternalFrame {
-	private JTextField txHoraTransaction;
+
 	private JTextField txProduto;
 	private JTextField txPrecoUnitario;
 	private JTextField txQuantidadeDisponivel;
@@ -132,16 +134,7 @@ public class ViewVenda extends JInternalFrame {
 		setBounds(100, 100, 1182, 601);
 		getContentPane().setLayout(null);
 
-		JLabel lblHoraDaTransao = new JLabel("Hora da transação :");
-		lblHoraDaTransao.setBounds(34, 30, 126, 14);
-		getContentPane().add(lblHoraDaTransao);
-
-		txHoraTransaction = new JTextField();
-
-		txHoraTransaction.setText("");
-		txHoraTransaction.setBounds(156, 27, 139, 20);
-		getContentPane().add(txHoraTransaction);
-		txHoraTransaction.setColumns(10);
+		
 
 		JLabel lblNewLabel = new JLabel("Produto :");
 		lblNewLabel.setBounds(34, 72, 74, 14);
@@ -202,8 +195,7 @@ public class ViewVenda extends JInternalFrame {
 
 		});
 		txQuantidade.addKeyListener(new KeyAdapter() {
-			
-			
+
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
@@ -211,7 +203,7 @@ public class ViewVenda extends JInternalFrame {
 				if (txProduto.getText().isEmpty()) {
 					e.consume();
 
-				} else if (Character.isLetter(c) || txQuantidade.getText().equals(',')) {
+				} else if (Character.isLetter(c) || txQuantidade.getText().equals(',') || c == '-' || c=='.' || c==',') {
 					e.consume();
 				}
 
@@ -349,6 +341,7 @@ public class ViewVenda extends JInternalFrame {
 		getContentPane().add(lblSubTotal);
 
 		txSubtotal = new JTextField();
+		
 		txSubtotal.setEditable(false);
 		txSubtotal.setBounds(624, 325, 86, 20);
 		getContentPane().add(txSubtotal);
@@ -404,6 +397,13 @@ public class ViewVenda extends JInternalFrame {
 		getContentPane().add(lblDinheiro);
 
 		txDinheiro = new JTextField();
+		txDinheiro.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusLost(FocusEvent arg0) {
+				vendacontrol.calcularTroco();
+				
+			}
+		});
 		txDinheiro.addKeyListener(new KeyAdapter() {
 
 			@Override
@@ -586,19 +586,21 @@ public class ViewVenda extends JInternalFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if (rdbtnNCarto.isSelected()) {
 					clientecontrol.buscaCliente();
+					vendacontrol.calculaDesconto();
 
 				} else {
 					clientecontrol.buscaClientePorCpf();
+					vendacontrol.calculaDesconto();
 				}
 
 			}
 		});
 
-		vendacontrol = new VendaController(txHoraTransaction, txProduto, txPrecoUnitario, txQuantidadeDisponivel,
-				txQuantidade, txTotal, table, txPesquisa, carrinho, txSubtotal, txDesconto, txTotalFinal, txCartão,
-				txDinheiro, txTroco, txNomec, txIdC, txCpfc, remedio, remediodao, venda, vendadao, listremedioestoque,
-				listremedio, estoquedao, estoque, carrinhoTable, txFieldIDProduto, clientebo, clientedao, cliente,
-				vendabo, comboBox);
+		vendacontrol = new VendaController(txProduto, txPrecoUnitario, txQuantidadeDisponivel, txQuantidade, txTotal,
+				table, txPesquisa, carrinho, txSubtotal, txDesconto, txTotalFinal, txCartão, txDinheiro, txTroco,
+				txNomec, txIdC, txCpfc, remedio, remediodao, venda, vendadao, listremedioestoque, listremedio,
+				estoquedao, estoque, carrinhoTable, txFieldIDProduto, clientebo, clientedao, cliente, vendabo,
+				comboBox);
 
 		funcionariocontroller = new FuncionarioController(txtNome, txtCPF, txtDataNascimento, txtDtAdmissao,
 				funcionario, funcionariodao, funcionariobo, comboBox);
