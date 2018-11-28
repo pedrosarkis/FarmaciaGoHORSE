@@ -55,6 +55,7 @@ public class VendaController {
 	private VendaBO vendabo;
 	private JComboBox comboBox;
 	private Funcionario funcionario = null;
+	private boolean resultado;
 
 	public VendaController(JTextField txProduto, JTextField txPrecoUnitario, JTextField txQuantidadeDisponivel,
 			JTextField txQuantidade, JTextField txTotal, JTable table, JTextField txPesquisa, JTable carrinho,
@@ -321,8 +322,8 @@ public class VendaController {
 
 					}
 
-					String resultado = vendabo.inserir(venda);
-					JOptionPane.showMessageDialog(null, resultado);
+					 resultado = vendabo.inserir(venda);
+					
 
 				}
 
@@ -350,13 +351,17 @@ public class VendaController {
 
 					}
 
-					String resultado = vendabo.inserir(venda);
-					JOptionPane.showMessageDialog(null, resultado);
+					 resultado = vendabo.inserir(venda);
+					
 
 				}
 
 			}
-
+			if(resultado) {
+			JOptionPane.showMessageDialog(null, "Venda efetuada");
+			} else {
+				JOptionPane.showMessageDialog(null, "Erro ao realizar venda");
+			}
 		}
 
 	}

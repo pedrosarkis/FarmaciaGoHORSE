@@ -16,6 +16,7 @@ public class FuncionarioBO {
 		} else {
 			if (funcionarioDAO.inserir(t)) {
 				mensagemRetorno = "Funcionario salvo";
+				
 			} else {
 				mensagemRetorno = "Erro ao salvar funcionario";
 			}

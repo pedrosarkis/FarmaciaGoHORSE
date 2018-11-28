@@ -222,6 +222,13 @@ public class ViewCadastroRemedio extends JInternalFrame {
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				remediocontrol.alterarRemedio();
+				txtComposicao.setText("");
+				txtMiligrama.setText("");
+				txtNomeComercial.setText("");
+				txtPreco.setText("");
+				txtMarca.setText("");
+				txtQuantidadeComprimido.setText("");
+				remediocontrol.pesquisarRemedioPorNome();
 			}
 		});
 		btnEditar.setBounds(184, 322, 117, 55);

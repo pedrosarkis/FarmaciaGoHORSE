@@ -19,6 +19,7 @@ import javax.swing.JComboBox;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
@@ -77,7 +78,7 @@ public class ViewVenda extends JInternalFrame {
 	private EstoqueDAO estoquedao;
 	private Estoque estoque = null;
 	private ViewCadastroCliente v1 = new ViewCadastroCliente();
-	private JComboBox comboBox;
+	private JComboBox<Object> comboBox;
 	private List<Estoque> carrinhoTable;
 	private JTextField txFieldIDProduto;
 	private ClienteBO clientebo;
@@ -134,8 +135,6 @@ public class ViewVenda extends JInternalFrame {
 		setBounds(100, 100, 1182, 601);
 		getContentPane().setLayout(null);
 
-		
-
 		JLabel lblNewLabel = new JLabel("Produto :");
 		lblNewLabel.setBounds(34, 72, 74, 14);
 		getContentPane().add(lblNewLabel);
@@ -151,12 +150,18 @@ public class ViewVenda extends JInternalFrame {
 		JButton btnAdicionarAoCarrinho = new JButton("Adicionar ao Carrinho");
 		btnAdicionarAoCarrinho.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if (Integer.parseInt(txQuantidade.getText()) > Integer.parseInt(txQuantidadeDisponivel.getText())) {
+					JOptionPane.showMessageDialog(null, "Quantidade não disponível");
+				} else {
+				
+				
+				
 				vendacontrol.preencheCarrinho();
 				vendacontrol.pegaritemCarrinho();
 				btnFinalizarCompra.setEnabled(true);
 
 			}
-		});
+		}});
 
 		btnAdicionarAoCarrinho.setBounds(362, 69, 177, 23);
 		getContentPane().add(btnAdicionarAoCarrinho);
@@ -203,7 +208,8 @@ public class ViewVenda extends JInternalFrame {
 				if (txProduto.getText().isEmpty()) {
 					e.consume();
 
-				} else if (Character.isLetter(c) || txQuantidade.getText().equals(',') || c == '-' || c=='.' || c==',') {
+				} else if (Character.isLetter(c) || txQuantidade.getText().equals(',') || c == '-' || c == '.'
+						|| c == ',') {
 					e.consume();
 				}
 
@@ -341,7 +347,7 @@ public class ViewVenda extends JInternalFrame {
 		getContentPane().add(lblSubTotal);
 
 		txSubtotal = new JTextField();
-		
+
 		txSubtotal.setEditable(false);
 		txSubtotal.setBounds(624, 325, 86, 20);
 		getContentPane().add(txSubtotal);
@@ -401,7 +407,7 @@ public class ViewVenda extends JInternalFrame {
 			@Override
 			public void focusLost(FocusEvent arg0) {
 				vendacontrol.calcularTroco();
-				
+
 			}
 		});
 		txDinheiro.addKeyListener(new KeyAdapter() {
@@ -498,6 +504,12 @@ public class ViewVenda extends JInternalFrame {
 		getContentPane().add(lblFuncionario);
 
 		comboBox = new JComboBox();
+		comboBox.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				funcionariocontroller.popularComboBoxFuncionarioAction();
+			}
+		});
 		comboBox.setBounds(1041, 69, 115, 20);
 		getContentPane().add(comboBox);
 
@@ -626,4 +638,5 @@ public class ViewVenda extends JInternalFrame {
 	public JComboBox getComboBox() {
 		return comboBox;
 	}
+
 }

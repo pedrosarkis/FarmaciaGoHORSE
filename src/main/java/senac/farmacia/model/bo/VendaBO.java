@@ -5,33 +5,25 @@ import senac.farmacia.model.dao.VendaDAO;
 import senac.farmacia.model.vo.Venda;
 
 public class VendaBO {
-	VendaDAO  vendadao = new VendaDAO();
+	VendaDAO vendadao = new VendaDAO();
 	EstoqueDAO estoquedao = new EstoqueDAO();
-	
-	
-	
-	
-	public String inserir (Venda t){
-		String mensagemRet = ""; 
-		if(vendadao.inserir(t)) {
-			
-			mensagemRet = "Vendido com Sucesso";
-			if(!estoquedao.subtrairEstoque(t.getRemedio().getIdRemedio(), t.getQuantidade())) {
-				mensagemRet = "Erro ao dar update no estoque";
-			} else { 
-				mensagemRet= "Update Feito";
+
+	public boolean inserir(Venda t) {
+		boolean vendido = false;
+		if (vendadao.inserir(t)) {
+
+			vendido = true;
+			if (!estoquedao.subtrairEstoque(t.getRemedio().getIdRemedio(), t.getQuantidade())) {
+				vendido = false;
+			} else {
+				vendido = true;
 			}
-			
-			
-			
+
 		} else {
-			mensagemRet = "BO - Erro ao realizar Venda";
+			vendido = false;
 		}
-		
-		
-		return mensagemRet;
+
+		return vendido;
 	}
-	
-	
 
 }

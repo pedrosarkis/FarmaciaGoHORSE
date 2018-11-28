@@ -112,8 +112,7 @@ public class ViewPrincipal extends JFrame {
 
 			}
 		});
-		mntmPopularEstoque
-				.setIcon(new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-comprimidos-64.png")));
+		mntmPopularEstoque.setIcon(new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-comprimidos-64.png")));
 		mnMedicamento.add(mntmPopularEstoque);
 
 		JMenu mnCliente = new JMenu("Cliente                            ");
@@ -134,13 +133,13 @@ public class ViewPrincipal extends JFrame {
 		mnCliente.add(mntmCadastrarCliente);
 
 		JMenu mnFuncionrio = new JMenu("Funcionário");
-		mnFuncionrio.setIcon(
-				new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-suporte-on-line-filled.png")));
+		mnFuncionrio
+				.setIcon(new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-suporte-on-line-filled.png")));
 		menuBar.add(mnFuncionrio);
 
 		JMenuItem mntmCadastrarFuncionrio = new JMenuItem("Cadastrar Funcionário");
-		mntmCadastrarFuncionrio.setIcon(
-				new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-suporte-on-line-filled.png")));
+		mntmCadastrarFuncionrio
+				.setIcon(new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-suporte-on-line-filled.png")));
 		mntmCadastrarFuncionrio.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ViewCadastroFuncionario cadastroFuncionario = new ViewCadastroFuncionario();
@@ -150,11 +149,11 @@ public class ViewPrincipal extends JFrame {
 			}
 		});
 		mnFuncionrio.add(mntmCadastrarFuncionrio);
-		
+
 		JMenu mnRelatorio = new JMenu("Relatório                    ");
 		mnRelatorio.setIcon(new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-documento-regular.png")));
 		menuBar.add(mnRelatorio);
-		
+
 		JMenuItem mntmMedicamento = new JMenuItem("Medicamento");
 		mntmMedicamento.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -163,16 +162,13 @@ public class ViewPrincipal extends JFrame {
 				relatorioMedicamento.setVisible(true);
 				List<Remedio> remedios = new ArrayList<>();
 				String caminho = null;
-				//gerarPlanilha.gerarPlanilhaMedicamentos(remedios, caminho);
-				
-				
-				
+				// gerarPlanilha.gerarPlanilhaMedicamentos(remedios, caminho);
+
 			}
 		});
 		mntmMedicamento.setIcon(new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-comprimidos-48.png")));
 		mnRelatorio.add(mntmMedicamento);
-		
-		
+
 		JMenuItem mntmRelatorioVenda = new JMenuItem("Relatório de Venda");
 		mntmRelatorioVenda.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -182,11 +178,10 @@ public class ViewPrincipal extends JFrame {
 					setContentPane(relatorioVenda);
 					relatorioVenda.setVisible(true);
 				} catch (Exception e1) {
-					
+
 					e1.printStackTrace();
 				}
-				
-				
+
 			}
 		});
 		mntmRelatorioVenda.setIcon(new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-gráfico.png")));

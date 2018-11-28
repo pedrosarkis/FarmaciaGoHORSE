@@ -23,7 +23,7 @@ public class FuncionarioController {
 	private FuncionarioDAO funcionariodao;
 	private FuncionarioBO funcionariobo;
 	private List<Funcionario> listfunc = null;
-	private JComboBox comboBox;
+	private JComboBox<Object> comboBox;
 
 	public FuncionarioController(JTextField txtNome, JTextField txtCPF, JTextField txtDataNascimento,
 			JTextField txtDtAdmissao, Funcionario funcionario, FuncionarioDAO funcionariodao,
@@ -40,6 +40,9 @@ public class FuncionarioController {
 	}
 
 	public void salvarAction() {
+		
+		
+		
 		SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");
 
 		if (!txtNome.getText().trim().isEmpty()) {
@@ -58,6 +61,7 @@ public class FuncionarioController {
 							funcionario.setDtNascimento(formatador.parse(txtDataNascimento.getText()));
 							String resultado = funcionariobo.inserir(funcionario);
 							JOptionPane.showMessageDialog(null, resultado);
+							
 
 						} catch (Exception e) {
 							JOptionPane.showMessageDialog(null, "Data no Formato Errado");
@@ -82,7 +86,7 @@ public class FuncionarioController {
 	}
 
 	public void popularComboBoxFuncionarioAction () {
-		  DefaultComboBoxModel comboModel = (DefaultComboBoxModel) comboBox.getModel();
+		  DefaultComboBoxModel<Object> comboModel = (DefaultComboBoxModel<Object>) comboBox.getModel();
 		  comboBox.removeAllItems();
 		listfunc = funcionariodao.popularComboNomeFuncionario();
 		for ( int i =0; i < listfunc.size(); i++) {
