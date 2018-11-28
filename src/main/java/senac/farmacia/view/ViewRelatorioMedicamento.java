@@ -26,6 +26,7 @@ public class ViewRelatorioMedicamento extends JInternalFrame {
 	
 	private List<Remedio> list = new ArrayList<>();
 	
+	RemedioDAO remedioDAO = new RemedioDAO();
 	public ViewRelatorioMedicamento() {
 		
 		
@@ -46,12 +47,14 @@ public class ViewRelatorioMedicamento extends JInternalFrame {
 				if (resultado == JFileChooser.APPROVE_OPTION) {
 					String caminhoEscolhido = jfc.getSelectedFile().getAbsolutePath();
 					
+					if(list.size() == 0) {
+						list = remedioDAO.listarTodos();
+						
+					}
+					
 					new GerarPlanilhaRemedio().gerarPlanilhaMedicamentos(list, caminhoEscolhido);
 					
-					System.out.println();
-//					ProdutoControler produtoControler = newProdutoControler();
-//					produtoControler.gerarRelatorio(produtosConsultados, caminhoEscolhido,ProdutoControler.tipo_relatorio_XLS);
-				
+					
 				
 				
 				
@@ -59,12 +62,8 @@ public class ViewRelatorioMedicamento extends JInternalFrame {
 				
 			}
 		});
-		btnGerarXML.setBounds(63, 287, 117, 29);
+		btnGerarXML.setBounds(175, 282, 117, 29);
 		getContentPane().add(btnGerarXML);
-		
-		JButton btnPdf = new JButton("PDF");
-		btnPdf.setBounds(331, 287, 117, 29);
-		getContentPane().add(btnPdf);
 		
 		final DefaultTableModel defaultTableModel = new DefaultTableModel();
 		defaultTableModel.addColumn("Laboratório");
@@ -86,7 +85,7 @@ public class ViewRelatorioMedicamento extends JInternalFrame {
 		
 		btnPesquisar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RemedioDAO remedioDAO = new RemedioDAO();
+				
 				
 				list = remedioDAO.listarTodos();
 				

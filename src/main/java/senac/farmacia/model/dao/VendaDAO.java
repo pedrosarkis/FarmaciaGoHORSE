@@ -29,14 +29,14 @@ public class VendaDAO extends Dao implements BaseDAO<Venda> {
 			stmt.setInt(5, t.getFuncionario().getIdFuncionario());
 
 			if (t.getCliente().getIdCliente() == null) {
-				//stmt.setObject(6, null);
-				 stmt.setNull(6, java.sql.Types.INTEGER);
-				 
+				// stmt.setObject(6, null);
+				stmt.setNull(6, java.sql.Types.INTEGER);
+
 				// stmt.setNull(6, java.sql.Types.NULL);
-				 //stmt.setObject(6,t.getCliente(),java.sql.Types.INTEGER);
+				// stmt.setObject(6,t.getCliente(),java.sql.Types.INTEGER);
 				// stmt.setInt(6, t.getCliente().getIdCliente());
 			} else {
-				stmt.setInt(6, t.getCliente().getIdCliente());	
+				stmt.setInt(6, t.getCliente().getIdCliente());
 
 			}
 
@@ -104,20 +104,32 @@ public class VendaDAO extends Dao implements BaseDAO<Venda> {
 
 	@Override
 	public List<Venda> listarTodos() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	public List<Venda> listarTodosDeAcordoComData(Date dataInicio, Date dataFim) {
 		try {
 			PreparedStatement stmt;
-			stmt = conexao.prepareStatement(
-					"SELECT * FROM Venda");
+			stmt = conexao.prepareStatement("SELECT "
+					+ "venda.idVenda, " + 
+					"	remedio.laboratorio, " + 
+					"	remedio.nomeComercial, " + 
+					"	remedio.composicao," + 
+					"	remedio.concentracao," + 
+					"    venda.valorVenda, " + 
+					"	venda.valorVendido, " + 
+					"	venda.quantidade " + 
+					"FROM Venda venda inner join Estoque estoque "
+					+ "inner join Remedio remedio where venda.idRemedio =  estoque.idRemedio and estoque.idRemedio = remedio.idRemedio;");
 			ResultSet res = stmt.executeQuery();
 			List<Venda> list = new ArrayList<>();
-			
+
 			while (res.next()) {
 				Venda venda = new Venda();
+				venda.setIdVenda(res.getInt("idVenda"));
+				venda.getRemedio().setLaboratorio(res.getString("laboratorio"));
+				venda.getRemedio().setNomecomercial(res.getString("nomeComercial"));
+				venda.getRemedio().setComposiçao(res.getString("composicao"));
+				venda.getRemedio().setConcentraçao(res.getString("concentracao"));
+				venda.setValorVenda(res.getDouble("valorVenda"));
+				venda.setValorVendido(res.getDouble("valorVendido"));
+				venda.setQuantidade(res.getInt("quantidade"));
 				
 				list.add(venda);
 
@@ -128,5 +140,4 @@ public class VendaDAO extends Dao implements BaseDAO<Venda> {
 			return null;
 		}
 	}
-
 }

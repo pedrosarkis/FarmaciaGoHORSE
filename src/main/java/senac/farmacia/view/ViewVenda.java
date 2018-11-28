@@ -165,7 +165,7 @@ public class ViewVenda extends JInternalFrame {
 			}
 		});
 
-		btnAdicionarAoCarrinho.setBounds(386, 69, 135, 23);
+		btnAdicionarAoCarrinho.setBounds(362, 69, 177, 23);
 		getContentPane().add(btnAdicionarAoCarrinho);
 
 		JLabel lblPreoUnitrio = new JLabel("Preço unitário :");
@@ -494,7 +494,7 @@ public class ViewVenda extends JInternalFrame {
 		});
 
 		JLabel lblFuncionario = new JLabel("Funcionario :");
-		lblFuncionario.setBounds(951, 72, 80, 14);
+		lblFuncionario.setBounds(951, 72, 96, 14);
 		getContentPane().add(lblFuncionario);
 
 		comboBox = new JComboBox();
@@ -528,7 +528,7 @@ public class ViewVenda extends JInternalFrame {
 				}
 			}
 		});
-		rdbtnNomeComercial.setBounds(51, 254, 128, 23);
+		rdbtnNomeComercial.setBounds(51, 254, 146, 23);
 		getContentPane().add(rdbtnNomeComercial);
 
 		final JRadioButton rdbtnComposio = new JRadioButton("Composição");
@@ -540,7 +540,7 @@ public class ViewVenda extends JInternalFrame {
 				}
 			}
 		});
-		rdbtnComposio.setBounds(182, 254, 96, 23);
+		rdbtnComposio.setBounds(209, 254, 126, 23);
 		getContentPane().add(rdbtnComposio);
 		ButtonGroup buttonGroup1 = new javax.swing.ButtonGroup();
 		buttonGroup1.add(rdbtnComposio);

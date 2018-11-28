@@ -1,26 +1,29 @@
 package senac.farmacia.view;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JButton;
-import javax.swing.JFormattedTextField;
+import javax.swing.JFileChooser;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.text.MaskFormatter;
+import javax.swing.table.DefaultTableModel;
 
 import senac.farmacia.model.dao.VendaDAO;
-
-import java.awt.event.ActionListener;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.awt.event.ActionEvent;
+import senac.farmacia.model.vo.GerarPlanilhaVenda;
+import senac.farmacia.model.vo.Venda;
 
 
 public class ViewRelatorioVenda extends JInternalFrame{
+	VendaDAO vendaDAO = new VendaDAO(); 
+	private List<Venda> listarTodasVendas = new ArrayList<>();
 	private JTable table;
+	
+	
 	public ViewRelatorioVenda() throws Exception {
 		setClosable(true);
 		setTitle("Relatório Vendas");
@@ -33,55 +36,95 @@ public class ViewRelatorioVenda extends JInternalFrame{
 		table = new JTable();
 		scrollPane.setViewportView(table);
 		
-		JLabel lblDataInicial = new JLabel("Data Inicial");
-		lblDataInicial.setBounds(16, 21, 85, 16);
-		getContentPane().add(lblDataInicial);
-		
-		JLabel lblDatafinal = new JLabel("DataFinal");
-		lblDatafinal.setBounds(346, 21, 61, 16);
-		getContentPane().add(lblDatafinal);
+		JLabel lblRelatorioVenda = new JLabel("Relatório venda");
+		lblRelatorioVenda.setBounds(67, 33, 142, 16);
+		getContentPane().add(lblRelatorioVenda);
 		
 		JButton btnGerarXml = new JButton("Gerar XML");
+		btnGerarXml.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser jfc = new JFileChooser();
+				jfc.setDialogTitle("Salvar relatório como...");
+				
+				int resultado = jfc.showSaveDialog(null);
+				if (resultado == JFileChooser.APPROVE_OPTION) {
+					String caminhoEscolhido = jfc.getSelectedFile().getAbsolutePath();
+					
+					if(listarTodasVendas.size() == 0) {
+						listarTodasVendas = vendaDAO.listarTodos();
+						
+					}
+					
+					new GerarPlanilhaVenda().gerarPlanilhaVendas(listarTodasVendas, caminhoEscolhido);
+					
+					
+				
+				
+				
+				}
+				
+				
+				
+				
+			}
+		});
 		btnGerarXml.setBounds(237, 301, 117, 29);
 		getContentPane().add(btnGerarXml);
 		
-		final JFormattedTextField txtDataInicial = new JFormattedTextField(new MaskFormatter("##/##/####"));
-		txtDataInicial.setBounds(98, 16, 127, 26);
-		getContentPane().add(txtDataInicial);
 		
-		final JFormattedTextField txtDataFinal = new JFormattedTextField(new MaskFormatter("##/##/####"));
-		txtDataFinal.setBounds(425, 16, 127, 26);
-		getContentPane().add(txtDataFinal);
+		
+		final DefaultTableModel defaultTableModel = new DefaultTableModel();
+		defaultTableModel.addColumn("id");
+		defaultTableModel.addColumn("Laboratório");
+		defaultTableModel.addColumn("Nome Comercial");
+		defaultTableModel.addColumn("Composiçao");
+		defaultTableModel.addColumn("Concentraçao");
+		defaultTableModel.addColumn("valorVenda");
+		defaultTableModel.addColumn("valorVendido");
+		defaultTableModel.addColumn("quantidade");
+		
+		table = new JTable(defaultTableModel);
+		
+		table.getColumnModel().getColumn(0).setPreferredWidth(20);
+		table.getColumnModel().getColumn(1).setPreferredWidth(20);
+		table.getColumnModel().getColumn(2).setPreferredWidth(20);
+		table.getColumnModel().getColumn(3).setPreferredWidth(20);
+		table.getColumnModel().getColumn(4).setPreferredWidth(20);
+		table.getColumnModel().getColumn(5).setPreferredWidth(20);
+		table.getColumnModel().getColumn(6).setPreferredWidth(20);
+		table.getColumnModel().getColumn(6).setPreferredWidth(20);
+		
 		
 		JButton btnPesquisar = new JButton("Pesquisar");
 		btnPesquisar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
 				
-				Date dataInicio = null;
-				Date dataFim = null;
 				
-				try {
-					dataInicio = simpleDateFormat.parse(txtDataInicial.getText());
-					dataFim = simpleDateFormat.parse(txtDataFinal.getText());
-				} catch (ParseException e1) {
-					e1.printStackTrace();
+				
+				listarTodasVendas = vendaDAO.listarTodos();
+				
+				
+				
+				for(Venda venda : listarTodasVendas) {
+					defaultTableModel.addRow(new Object[] {
+							venda.getIdVenda(),
+							venda.getRemedio().getLaboratorio(),
+							venda.getRemedio().getNomecomercial(),
+							venda.getRemedio().getComposiçao(),
+							venda.getRemedio().getConcentraçao(),
+							venda.getValorVenda(), 
+							venda.getValorVendido(),
+							venda.getQuantidade()
+						
+							
+					});
 				}
-				 
-				Date dataHoje = new Date();
-				
-				if (dataFim.after(dataHoje)) {
-					JOptionPane.showMessageDialog(null, "Data final não pode ser superior a data de hoje");
-					return;
-				}
-				
-				VendaDAO vendaDAO = new VendaDAO();
-				vendaDAO.listarTodosDeAcordoComData(dataInicio, dataFim);
-				
 			}
 		});
 		
-		btnPesquisar.setBounds(237, 66, 117, 29);
+		btnPesquisar.setBounds(221, 28, 117, 29);
 		getContentPane().add(btnPesquisar);
+		scrollPane.setViewportView(table);
 	}
+	
 }
