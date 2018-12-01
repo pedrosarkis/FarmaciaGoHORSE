@@ -14,6 +14,7 @@ import javax.swing.JButton;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
 
 import senac.farmacia.controller.ClienteController;
@@ -21,6 +22,9 @@ import senac.farmacia.model.bo.ClienteBO;
 import senac.farmacia.model.dao.ClienteDAO;
 import senac.farmacia.model.vo.Cliente;
 import javax.swing.JFormattedTextField;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
 
 public class ViewCadastroCliente extends JInternalFrame {
 	/**
@@ -36,9 +40,11 @@ public class ViewCadastroCliente extends JInternalFrame {
 	private ClienteController clientecontrol =null;
 	private ClienteBO clientebo ;
 	private JTextField txCartão;
-	private JTextField txCpfc;
+	private JFormattedTextField  txCpfc;
 	private JTextField txNomec;
 	private JTextField txId;
+	private JTextField txPesquisaCliente;
+	private JTable clientesTabela;
 
 	/**
 	 * Launch the application.
@@ -61,7 +67,7 @@ public class ViewCadastroCliente extends JInternalFrame {
 	 */
 	public ViewCadastroCliente() {
 		setClosable(true);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 1153, 796);
 		getContentPane().setLayout(null);
 
 		JLabel lblNome = new JLabel("Nome:");
@@ -87,7 +93,9 @@ public class ViewCadastroCliente extends JInternalFrame {
 		lblCpf.setBounds(18, 56, 61, 16);
 		getContentPane().add(lblCpf);
 
-		txtCPF = new JTextField();
+		txtCPF = new  JFormattedTextField();
+		
+		
 		txtCPF.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -100,6 +108,13 @@ public class ViewCadastroCliente extends JInternalFrame {
 		txtCPF.setBounds(148, 51, 130, 26);
 		getContentPane().add(txtCPF);
 		txtCPF.setColumns(10);
+		try {
+			((JFormattedTextField) txtCPF).setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("###.###.###-##")));
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		JLabel lblDataNascimento = new JLabel("Data Nascimento:");
 		lblDataNascimento.setBounds(18, 96, 122, 16);
@@ -163,7 +178,38 @@ public class ViewCadastroCliente extends JInternalFrame {
 		btnGerarCartao.setBounds(88, 195, 117, 52);
 		getContentPane().add(btnGerarCartao);
 		
-		clientecontrol = new ClienteController(txtNome, txtCPF, txtDataNascimento, txCartaoGerado, clientedao, cliente,clientebo,txCartão,txCpfc,txNomec,txId);
+		
+		
+		JLabel lblProcurarCliente = new JLabel("Procurar Cliente : ");
+		lblProcurarCliente.setBounds(550, 19, 148, 14);
+		getContentPane().add(lblProcurarCliente);
+		
+		txPesquisaCliente = new JTextField();
+		txPesquisaCliente.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				clientecontrol.PesquisarClientePorNome();
+			}
+		});
+		txPesquisaCliente.setBounds(740, 16, 309, 20);
+		getContentPane().add(txPesquisaCliente);
+		txPesquisaCliente.setColumns(10);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(605, 96, 475, 250);
+		getContentPane().add(scrollPane);
+		
+		clientesTabela = new JTable();
+		clientesTabela.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"IdCliente", "Nome", "CPf", "Data"
+			}
+		));
+		scrollPane.setViewportView(clientesTabela);
+		
+		clientecontrol = new ClienteController(txtNome, txtCPF, txtDataNascimento, txCartaoGerado, clientedao, cliente,clientebo,txCartão,txCpfc,txNomec,txId,txPesquisaCliente,clientesTabela);
 
 	}
 }

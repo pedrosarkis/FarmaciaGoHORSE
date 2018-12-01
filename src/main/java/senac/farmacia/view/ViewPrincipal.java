@@ -115,6 +115,17 @@ public class ViewPrincipal extends JFrame {
 		mntmPopularEstoque.setIcon(new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-comprimidos-64.png")));
 		mnMedicamento.add(mntmPopularEstoque);
 
+		JMenuItem mntmEstoque = new JMenuItem("Estoque");
+		mntmEstoque.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				ViewEstoque e1 = new ViewEstoque();
+				setContentPane(e1);
+				e1.show();
+			}
+		});
+		mnMedicamento.add(mntmEstoque);
+
 		JMenu mnCliente = new JMenu("Cliente                            ");
 		mnCliente.setIcon(new ImageIcon(ViewPrincipal.class.getResource("/icones/icons8-usuário.png")));
 		menuBar.add(mnCliente);

@@ -27,7 +27,6 @@ public class RemedioController {
 	private List<Remedio> medicamentosCadastrados;
 	private Remedio remedioSelecionado;
 	private JTextField txPesquisaRemedio;
-	
 
 	public RemedioController(JTextField txtMarca, JTextField txtNomeComercial, JTextField txtComposicao,
 			JTextField txtMiligrama, JTextField txtQuantidadeComprimido, JTextField txtPreco, RemedioDAO remediodao,
@@ -68,6 +67,11 @@ public class RemedioController {
 			String resultado = remediobo.inserir(remedio);
 			JOptionPane.showMessageDialog(null, resultado);
 
+			DefaultTableModel model = (DefaultTableModel) medicamentos.getModel();
+			model.addRow(
+					new Object[] { remedio.getNomecomercial(), remedio.getLaboratorio(), remedio.getPrecounitario(),
+							remedio.getQdtecomprimidos(), remedio.getComposiçao(), remedio.getConcentraçao() });
+
 		}
 
 	}
@@ -93,8 +97,6 @@ public class RemedioController {
 		txtNomeComercial.setText(remedioSelecionado.getNomecomercial());
 		txtPreco.setText(String.valueOf(remedioSelecionado.getPrecounitario()));
 		txtQuantidadeComprimido.setText(String.valueOf(remedioSelecionado.getQdtecomprimidos()));
-		
-		
 
 	}
 
@@ -108,34 +110,33 @@ public class RemedioController {
 
 		Remedio r = new Remedio();
 		remedioSelecionado = pegarItemTableRemedio();
-		
+
 		r.setComposiçao(txtComposicao.getText());
 		r.setConcentraçao(txtMiligrama.getText());
 		r.setLaboratorio(txtMarca.getText());
 		r.setNomecomercial(txtNomeComercial.getText());
 		r.setIdRemedio(remedioSelecionado.getIdRemedio());
 		r.setPrecounitario(Double.parseDouble(txtPreco.getText()));
-		r.setQdtecomprimidos(Integer.parseInt(txtQuantidadeComprimido.getText()));				
-		
+		r.setQdtecomprimidos(Integer.parseInt(txtQuantidadeComprimido.getText()));
 
 		String resultado = remediobo.alterar(r);
 		JOptionPane.showMessageDialog(null, resultado);
 
 	}
-	
-	public void excluirMedicamento () {
-		
-		int dialogResult = JOptionPane.showConfirmDialog(null, "Confirmar Exclusão?", "Confirmação de Exclusão", JOptionPane.YES_NO_OPTION);
-		
+
+	public void excluirMedicamento() {
+
+		int dialogResult = JOptionPane.showConfirmDialog(null, "Confirmar Exclusão?", "Confirmação de Exclusão",
+				JOptionPane.YES_NO_OPTION);
+
 		if (dialogResult == JOptionPane.YES_OPTION) {
-			
+
 			remedioSelecionado = pegarItemTableRemedio();
-			
+
 			String resultado = remediobo.excluir(remedioSelecionado);
 			JOptionPane.showMessageDialog(null, resultado);
-			
+
 		}
-		
-		
+
 	}
 }

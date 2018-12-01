@@ -135,4 +135,30 @@ public class FuncionarioDAO extends Dao implements BaseDAO<Funcionario> {
 			return false;
 		}
 	}
+
+
+	public List<Funcionario> listarFuncionarioPorNome(String nome) {
+		try {
+			PreparedStatement stmt;
+			stmt = conexao.prepareStatement("Select idFuncionario,nome,cpf from Funcionario where nome like ?");
+			stmt.setString(1, '%' + nome  +'%');
+			ResultSet res = stmt.executeQuery();
+			List<Funcionario> list = new ArrayList<>();
+			while (res.next()) {
+				Funcionario f = new Funcionario();
+				f.setIdFuncionario(res.getInt("idFuncionario"));
+				f.setNome(res.getString("nome"));
+				f.setCpf(res.getString("cpf"));
+				//f.setDtNascimento(res.getTime("dtnascimento"));
+				
+				list.add(f);
+			}
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e);
+			return null;
+
+		}
+	}
 }

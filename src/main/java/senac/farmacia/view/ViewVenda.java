@@ -11,11 +11,13 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -31,6 +33,9 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.MaskFormatter;
+import javax.swing.text.NumberFormatter;
 
 import senac.farmacia.controller.ClienteController;
 import senac.farmacia.controller.FuncionarioController;
@@ -62,12 +67,12 @@ public class ViewVenda extends JInternalFrame {
 	private JTextField txSubtotal;
 	private JTextField txDesconto;
 	private JTextField txTotalFinal;
-	private JTextField txCartão;
-	private JTextField txDinheiro;
+	private JFormattedTextField txCartao;
+	private JFormattedTextField txDinheiro;
 	private JTextField txTroco;
 	private JTextField txNomec;
 	private JTextField txIdC;
-	private JTextField txCpfc;
+	private JFormattedTextField  txCpfc;
 	private VendaController vendacontrol;
 	private Venda venda;
 	private VendaDAO vendadao;
@@ -96,6 +101,10 @@ public class ViewVenda extends JInternalFrame {
 	private FuncionarioBO funcionariobo;
 	private List<Funcionario> listfunc = null;
 	private JTextField txCartaoGerado;
+	private JTextField txPesquisaCliente;
+	private JTable clientesTabela;
+	private JTextField txPesquisaFuncionarioNome;
+	private JTable tableFuncionarios;
 
 	/**
 	 * Launch the application.
@@ -383,8 +392,8 @@ public class ViewVenda extends JInternalFrame {
 		lblCartoFrmacia.setBounds(753, 320, 135, 14);
 		getContentPane().add(lblCartoFrmacia);
 
-		txCartão = new JTextField();
-		txCartão.addKeyListener(new KeyAdapter() {
+		txCartao = new JFormattedTextField();
+		txCartao.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
@@ -394,15 +403,21 @@ public class ViewVenda extends JInternalFrame {
 				}
 			}
 		});
-		txCartão.setBounds(719, 345, 193, 20);
-		getContentPane().add(txCartão);
-		txCartão.setColumns(10);
+		txCartao.setBounds(719, 345, 193, 20);
+		getContentPane().add(txCartao);
+		txCartao.setColumns(10);
 
 		JLabel lblDinheiro = new JLabel("Dinheiro :");
 		lblDinheiro.setBounds(539, 406, 73, 14);
 		getContentPane().add(lblDinheiro);
 
-		txDinheiro = new JTextField();
+		txDinheiro = new JFormattedTextField();
+		
+		DecimalFormat dFormat = new DecimalFormat("#,###,###.00");
+		NumberFormatter formatter = new NumberFormatter(dFormat);
+		formatter.setFormat(dFormat);
+		formatter.setAllowsInvalid(false);
+		txDinheiro.setFormatterFactory(new DefaultFormatterFactory(formatter));
 		txDinheiro.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {
@@ -463,13 +478,20 @@ public class ViewVenda extends JInternalFrame {
 		lblCpf.setBounds(719, 433, 46, 14);
 		getContentPane().add(lblCpf);
 
-		txCpfc = new JTextField();
+		txCpfc = new JFormattedTextField();
 		txCpfc.setEditable(false);
-		txCpfc.setBounds(813, 430, 46, 20);
+		txCpfc.setBounds(813, 430, 177, 20);
 		getContentPane().add(txCpfc);
-		txCpfc.setBounds(753, 430, 177, 20);
-		getContentPane().add(txCpfc);
+		
+		
 		txCpfc.setColumns(10);
+		try {
+			txCpfc.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("###.###.###-##")));
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		JButton btnRealizarCadastro = new JButton("Realizar Cadastro");
 		btnRealizarCadastro.addActionListener(new ActionListener() {
@@ -601,6 +623,7 @@ public class ViewVenda extends JInternalFrame {
 					vendacontrol.calculaDesconto();
 
 				} else {
+					
 					clientecontrol.buscaClientePorCpf();
 					vendacontrol.calculaDesconto();
 				}
@@ -609,16 +632,16 @@ public class ViewVenda extends JInternalFrame {
 		});
 
 		vendacontrol = new VendaController(txProduto, txPrecoUnitario, txQuantidadeDisponivel, txQuantidade, txTotal,
-				table, txPesquisa, carrinho, txSubtotal, txDesconto, txTotalFinal, txCartão, txDinheiro, txTroco,
+				table, txPesquisa, carrinho, txSubtotal, txDesconto, txTotalFinal, txCartao, txDinheiro, txTroco,
 				txNomec, txIdC, txCpfc, remedio, remediodao, venda, vendadao, listremedioestoque, listremedio,
 				estoquedao, estoque, carrinhoTable, txFieldIDProduto, clientebo, clientedao, cliente, vendabo,
 				comboBox);
 
 		funcionariocontroller = new FuncionarioController(txtNome, txtCPF, txtDataNascimento, txtDtAdmissao,
-				funcionario, funcionariodao, funcionariobo, comboBox);
+				funcionario, funcionariodao, funcionariobo, comboBox,txPesquisaFuncionarioNome,tableFuncionarios);
 
 		clientecontrol = new ClienteController(txtNome, txtCPF, txtDataNascimento, txCartaoGerado, clientedao, cliente,
-				clientebo, txCartão, txCpfc, txNomec, txIdC);
+				clientebo, txCartao, txCpfc, txNomec, txIdC,txPesquisaCliente,clientesTabela);
 
 		JButton btnLimpar_1 = new JButton("Limpar");
 		btnLimpar_1.addActionListener(new ActionListener() {
@@ -626,17 +649,34 @@ public class ViewVenda extends JInternalFrame {
 				txNomec.setText("");
 				txIdC.setText("");
 				txCpfc.setText("");
-				txCartão.setText("");
+				txCartao.setText("");
 
 			}
 		});
 		btnLimpar_1.setBounds(868, 471, 89, 23);
 		getContentPane().add(btnLimpar_1);
+		
+		JButton btnNewButton = new JButton("Limpar Carrinho ");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				vendacontrol.limparCarrinhoInteiro();
+			}
+		});
+		btnNewButton.setBounds(944, 125, 135, 23);
+		getContentPane().add(btnNewButton);
+		
+		JButton btnDeletarLinha = new JButton("Deletar Linha");
+		btnDeletarLinha.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				vendacontrol.limparLinhaSelecionada();
+			}
+		});
+		btnDeletarLinha.setBounds(944, 172, 144, 23);
+		getContentPane().add(btnDeletarLinha);
 
 	}
 
 	public JComboBox getComboBox() {
 		return comboBox;
 	}
-
 }

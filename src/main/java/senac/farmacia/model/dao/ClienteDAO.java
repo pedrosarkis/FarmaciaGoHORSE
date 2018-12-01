@@ -184,4 +184,31 @@ public class ClienteDAO extends Dao implements BaseDAO<Cliente> {
 		}
 
 	}
+
+
+	public List<Cliente> listarpornome(String nome) {
+		try {
+			PreparedStatement stmt;
+			stmt = conexao.prepareStatement("Select idCliente,nome,cpf,dtnascimento,ncartao from Cliente where nome like ?");
+			stmt.setString(1,'%' + nome +'%');
+			ResultSet res = stmt.executeQuery();
+			List<Cliente> list = new ArrayList<>();
+			while (res.next()) {
+				Cliente c = new Cliente();
+				c.setIdCliente(res.getInt("idCliente"));
+				c.setNome(res.getString("nome"));
+				c.setCpf(res.getString("cpf"));
+				c.setDtnascimento(res.getDate("dtnascimento"));
+				c.setCartao(res.getInt("ncartao"));
+				list.add(c);
+			}
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e);
+			return null;
+
+		}
+
+	}
 }

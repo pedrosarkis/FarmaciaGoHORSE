@@ -1,5 +1,7 @@
 package senac.farmacia.controller;
 
+import java.text.DecimalFormat;
+import java.util.Formatter;
 import java.util.List;
 
 import javax.swing.JComboBox;
@@ -7,6 +9,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.NumberFormatter;
 
 import senac.farmacia.model.bo.ClienteBO;
 import senac.farmacia.model.bo.VendaBO;
@@ -105,7 +108,7 @@ public class VendaController {
 	public void preencherVenda() {
 		estoqueSelecionado = pegarEstoqueSelecionado();
 		txProduto.setText(estoqueSelecionado.getRemedio().getNomecomercial());
-		txPrecoUnitario.setText(String.valueOf(estoqueSelecionado.getRemedio().getPrecounitario()));
+		txPrecoUnitario.setText(String.valueOf("R$ " + estoqueSelecionado.getRemedio().getPrecounitario()));
 		txQuantidadeDisponivel.setText(String.valueOf(estoqueSelecionado.getQuantidade()));
 		txFieldIDProduto.setText(String.valueOf(estoqueSelecionado.getRemedio().getIdRemedio()));
 
@@ -170,7 +173,7 @@ public class VendaController {
 				} else {
 					int quantidade = Integer.parseInt(txQuantidade.getText());
 					Double valor = quantidade * this.estoqueSelecionado.getRemedio().getPrecounitario();
-					txTotal.setText(String.valueOf(valor));
+					txTotal.setText(String.valueOf("R$ " + valor));
 
 				}
 			}
@@ -178,9 +181,8 @@ public class VendaController {
 	}
 
 	// Adiciona ITEM AO CARRINHO Feito com maestria
+	// corrigir a máscara de preço
 	public void preencheCarrinho() {
-		
-		
 
 		boolean existe = false;
 
@@ -196,7 +198,9 @@ public class VendaController {
 			if (!existe) {
 				DefaultTableModel model = (DefaultTableModel) carrinho.getModel();
 
-				model.addRow(new Object[] { txFieldIDProduto.getText(), txProduto.getText(), txPrecoUnitario.getText(),
+				String numero = txPrecoUnitario.getText();
+				numero = numero.substring(2, numero.length());
+				model.addRow(new Object[] { txFieldIDProduto.getText(), txProduto.getText(), numero,
 						txQuantidade.getText() });
 
 			} else {
@@ -210,7 +214,7 @@ public class VendaController {
 
 							int qtdeNova = qtdeatual + Integer.parseInt((String) carrinho.getValueAt(i, 3));
 							carrinho.setValueAt(String.valueOf(qtdeNova), i, 3);
-							
+
 						} else {
 							JOptionPane.showMessageDialog(null, "Impossível adicionar " + qtdeatual
 									+ " pois totalizará " + total + " e só temos " + txQuantidadeDisponivel.getText());
@@ -222,7 +226,6 @@ public class VendaController {
 
 			}
 		}
-		
 
 		/*
 		 * int qtdeDisponivel = Integer.parseInt(txQuantidadeDisponivel.getText()); if
@@ -253,26 +256,54 @@ public class VendaController {
 						* Double.parseDouble((String) carrinho.getValueAt(i, 3));
 
 			}
-			txSubtotal.setText(String.valueOf(total));
+			txSubtotal.setText(String.valueOf("R$" + total));
 		}
 
 	}
 
+		private final static double desconto = 10;  // desconto aplicado em uma constante
 	// calcula o desconto se houver cliente retornado na pesqusisa
 	public void calculaDesconto() {
-		
-		if(carrinho.getRowCount() >0) {
 
-		if (!txNomec.getText().trim().isEmpty()) {
+		if (carrinho.getRowCount() > 0) {
 
-			double subtotal = Double.parseDouble(txSubtotal.getText());
-			double totalComDesconto = subtotal - (subtotal/10);
-			txTotalFinal.setText(String.valueOf(totalComDesconto));
-			
-			txDesconto.setText(String.valueOf(subtotal/10));
+			if (!txNomec.getText().trim().isEmpty()) {
 
+				DecimalFormat dFormat = new DecimalFormat("#,###,###.00");
+				String subtotalString = txSubtotal.getText().substring(2, txSubtotal.getText().length());
+				double subtotal = Double.parseDouble(subtotalString);
+				double totalComDesconto = subtotal - (subtotal / desconto);
+				txTotalFinal.setText(String.valueOf("R$ " + totalComDesconto));
+
+				dFormat.format(subtotal);
+				txDesconto.setText(String.valueOf("R$ " + subtotal / desconto));
+
+			}
 		}
 	}
+
+	public void limparTodaTela() {
+		limparCarrinhoInteiro();
+		txProduto.setText("");
+		txPrecoUnitario.setText("");
+		txFieldIDProduto.setText("");
+		txQuantidade.setText("");
+		txQuantidadeDisponivel.setText("");
+		txPesquisa.setText("");
+		txTotal.setText("");
+		txTotalFinal.setText("");
+		txSubtotal.setText("");
+		txDesconto.setText("");
+		txDinheiro.setText("");
+		txTroco.setText("");
+		txNomec.setText("");
+		txIdC.setText("");
+		txCpfc.setText("");
+		txCartão.setText("");
+
+		DefaultTableModel model = (DefaultTableModel) table.getModel();
+		model.setRowCount(0);
+
 	}
 
 	/*
@@ -322,8 +353,7 @@ public class VendaController {
 
 					}
 
-					 resultado = vendabo.inserir(venda);
-					
+					resultado = vendabo.inserir(venda);
 
 				}
 
@@ -351,14 +381,15 @@ public class VendaController {
 
 					}
 
-					 resultado = vendabo.inserir(venda);
-					
+					resultado = vendabo.inserir(venda);
 
 				}
 
 			}
-			if(resultado) {
-			JOptionPane.showMessageDialog(null, "Venda efetuada");
+			if (resultado) {
+				JOptionPane.showMessageDialog(null, "Venda efetuada");
+				limparTodaTela();
+
 			} else {
 				JOptionPane.showMessageDialog(null, "Erro ao realizar venda");
 			}
@@ -387,7 +418,7 @@ public class VendaController {
 
 			double valor = Double.parseDouble((String) carrinho.getValueAt(linha, 2))
 					* Double.parseDouble((String) carrinho.getValueAt(linha, 3));
-			double subtotal = Double.parseDouble(txSubtotal.getText());
+			double subtotal = Double.parseDouble(txSubtotal.getText().substring(2, txSubtotal.getText().length()));
 			subtotal = subtotal - valor;
 
 			txSubtotal.setText(String.valueOf(subtotal));
@@ -401,8 +432,10 @@ public class VendaController {
 
 	public void calcularTroco() {
 
-	 double troco = Double.parseDouble(txDinheiro.getText()) - Double.parseDouble(txTotalFinal.getText());
-	 txTroco.setText(String.valueOf(troco));
+		String money = txDinheiro.getText().substring(0, txDinheiro.getText().length() -3).replaceAll("[,.]", "");
+		String totalFinal = txTotalFinal.getText().substring(2, txTotalFinal.getText().length());
+		double troco = Double.parseDouble(money) - Double.parseDouble(totalFinal);
+		txTroco.setText(String.valueOf("R$ " + troco));
 
 	}
 }

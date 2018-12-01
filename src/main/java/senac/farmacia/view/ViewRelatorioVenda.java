@@ -16,12 +16,17 @@ import javax.swing.table.DefaultTableModel;
 import senac.farmacia.model.dao.VendaDAO;
 import senac.farmacia.model.vo.GerarPlanilhaVenda;
 import senac.farmacia.model.vo.Venda;
+import javax.swing.JTextField;
 
 
 public class ViewRelatorioVenda extends JInternalFrame{
 	VendaDAO vendaDAO = new VendaDAO(); 
 	private List<Venda> listarTodasVendas = new ArrayList<>();
 	private JTable table;
+	private JTextField txMaiorQue;
+	private JTextField txMenorQue;
+	
+	
 	
 	
 	public ViewRelatorioVenda() throws Exception {
@@ -99,31 +104,77 @@ public class ViewRelatorioVenda extends JInternalFrame{
 				
 				
 				
-				listarTodasVendas = vendaDAO.listarTodos();
-				
-				
-				
-				for(Venda venda : listarTodasVendas) {
-					defaultTableModel.addRow(new Object[] {
-							venda.getIdVenda(),
-							venda.getRemedio().getLaboratorio(),
-							venda.getRemedio().getNomecomercial(),
-							venda.getRemedio().getComposiçao(),
-							venda.getRemedio().getConcentraçao(),
-							venda.getValorVenda(), 
-							venda.getValorVendido(),
-							venda.getQuantidade(),
-							venda.getCliente().getNome()
+				if(!(txMaiorQue.getText().isEmpty() && txMenorQue.getText().isEmpty())) {
+					int maiorque = Integer.parseInt(txMaiorQue.getText());
+					int menorque = Integer.parseInt(txMenorQue.getText());
+					listarTodasVendas = vendaDAO.listarTodos(maiorque,menorque);
+					
+					
+					DefaultTableModel model = (DefaultTableModel) table.getModel();
+					model.setNumRows(0);
+					for(Venda venda : listarTodasVendas) {
 						
+						defaultTableModel.addRow(new Object[] {
+								venda.getIdVenda(),
+								venda.getRemedio().getLaboratorio(),
+								venda.getRemedio().getNomecomercial(),
+								venda.getRemedio().getComposiçao(),
+								venda.getRemedio().getConcentraçao(),
+								venda.getValorVenda(), 
+								venda.getValorVendido(),
+								venda.getQuantidade(),
+								venda.getCliente().getNome()
 							
-					});
+								
+						});
+					}
+					
+				} else {
+					listarTodasVendas = vendaDAO.listarTodos();
+					
+					
+					
+					DefaultTableModel model = (DefaultTableModel) table.getModel();
+					model.setNumRows(0);
+					for(Venda venda : listarTodasVendas) {
+						
+						defaultTableModel.addRow(new Object[] {
+								venda.getIdVenda(),
+								venda.getRemedio().getLaboratorio(),
+								venda.getRemedio().getNomecomercial(),
+								venda.getRemedio().getComposiçao(),
+								venda.getRemedio().getConcentraçao(),
+								venda.getValorVenda(), 
+								venda.getValorVendido(),
+								venda.getQuantidade(),
+								venda.getCliente().getNome()
+							
+								
+						});
+					}
 				}
+				
+			
 			}
 		});
 		
 		btnPesquisar.setBounds(221, 28, 117, 29);
 		getContentPane().add(btnPesquisar);
 		scrollPane.setViewportView(table);
+		
+		JLabel lblQuantidadeDeRemedio = new JLabel("Quantidade de Remedio  maior que,menor que:");
+		lblQuantidadeDeRemedio.setBounds(6, 71, 244, 14);
+		getContentPane().add(lblQuantidadeDeRemedio);
+		
+		txMaiorQue = new JTextField();
+		txMaiorQue.setBounds(260, 68, 38, 20);
+		getContentPane().add(txMaiorQue);
+		txMaiorQue.setColumns(10);
+		
+		txMenorQue = new JTextField();
+		txMenorQue.setBounds(338, 68, 38, 20);
+		getContentPane().add(txMenorQue);
+		txMenorQue.setColumns(10);
 	}
 	
 }

@@ -102,6 +102,49 @@ public class VendaDAO extends Dao implements BaseDAO<Venda> {
 
 	}
 
+	public List<Venda> listarTodos(int maiorque,int menorque) {
+		try {
+			PreparedStatement stmt;
+			/*
+			 * stmt = conexao.prepareStatement("SELECT " + "venda.idVenda, " +
+			 * "	remedio.laboratorio, " + "	remedio.nomeComercial, " +
+			 * "	remedio.composicao," + "	remedio.concentracao," +
+			 * "    venda.valorVenda, " + "	venda.valorVendido, " + "	venda.quantidade " +
+			 * "venda.idCliente" + "FROM Venda venda inner join Estoque estoque " +
+			 * "inner join Remedio remedio where venda.idRemedio =  estoque.idRemedio and estoque.idRemedio = remedio.idRemedio;"
+			 * );
+			 */
+
+			stmt = conexao.prepareStatement(
+					"Select v.idVenda,r.laboratorio,r.nomeComercial,r.Composicao,r.concentracao,v.valorVenda,v.ValorVendido,v.Quantidade,c.nome from venda v join remedio r on v.idRemedio = r.idRemedio left join "
+					+ "cliente c on v.idCliente = c.idCliente where quantidade >? and quantidade < ? order by idVenda");
+			stmt.setInt(1, maiorque);
+			stmt.setInt(2, menorque);
+			ResultSet res = stmt.executeQuery();
+			List<Venda> list = new ArrayList<>();
+
+			while (res.next()) {
+				Venda venda = new Venda();
+				venda.setIdVenda(res.getInt("idVenda"));
+				venda.getRemedio().setLaboratorio(res.getString("laboratorio"));
+				venda.getRemedio().setNomecomercial(res.getString("nomeComercial"));
+				venda.getRemedio().setComposiçao(res.getString("composicao"));
+				venda.getRemedio().setConcentraçao(res.getString("concentracao"));
+				venda.setValorVenda(res.getDouble("valorVenda"));
+				venda.setValorVendido(res.getDouble("valorVendido"));
+				venda.setQuantidade(res.getInt("quantidade"));
+				venda.getCliente().setNome(res.getString("c.nome"));
+
+				list.add(venda);
+
+			}
+			return list;
+
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 	@Override
 	public List<Venda> listarTodos() {
 		try {
@@ -119,6 +162,7 @@ public class VendaDAO extends Dao implements BaseDAO<Venda> {
 			stmt = conexao.prepareStatement(
 					"Select v.idVenda,r.laboratorio,r.nomeComercial,r.Composicao,r.concentracao,v.valorVenda,v.ValorVendido,v.Quantidade,c.nome from venda v join remedio r on v.idRemedio = r.idRemedio left join "
 					+ "cliente c on v.idCliente = c.idCliente order by idVenda");
+			
 			ResultSet res = stmt.executeQuery();
 			List<Venda> list = new ArrayList<>();
 

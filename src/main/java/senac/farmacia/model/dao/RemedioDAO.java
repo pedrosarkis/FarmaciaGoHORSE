@@ -107,6 +107,36 @@ public class RemedioDAO extends Dao implements BaseDAO<Remedio> {
 			return null;
 		}
 	}
+	
+	public List<Remedio> listarRemedioPorQuantidade(int maiorque,int menorque) {
+
+		try {
+			PreparedStatement stmt;
+			stmt = conexao.prepareStatement(
+					"Select idRemedio,laboratorio,nomeComercial,composicao,concentracao,quantidadeComprimidos,precoUnitario from Remedio where quantidadeComprimidos > ? and quantidadeComprimidos < ?");
+			stmt.setInt(1, maiorque);
+			stmt.setInt(2, menorque);
+			ResultSet res = stmt.executeQuery();
+			List<Remedio> list = new ArrayList<>();
+			while (res.next()) {
+				Remedio r = new Remedio();
+				r.setIdRemedio(res.getInt("idRemedio"));
+				r.setLaboratorio(res.getString("laboratorio"));
+				r.setNomecomercial(res.getString("nomeComercial"));
+				r.setComposiçao(res.getString("composicao"));
+				r.setQdtecomprimidos(res.getInt("quantidadeComprimidos"));
+				r.setPrecounitario(res.getDouble("precoUnitario"));
+				r.setConcentraçao(res.getString("concentracao"));
+				list.add(r);
+
+			}
+			return list;
+
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 
 	public List<Remedio> PesquisarRemedioPorNome(String nome) {
 		try {

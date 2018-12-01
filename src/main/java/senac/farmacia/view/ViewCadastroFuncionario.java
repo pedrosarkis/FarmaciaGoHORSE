@@ -7,14 +7,20 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JInternalFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.MaskFormatter;
 
 import senac.farmacia.controller.FuncionarioController;
 import senac.farmacia.model.bo.FuncionarioBO;
 import senac.farmacia.model.dao.FuncionarioDAO;
 import senac.farmacia.model.vo.Funcionario;
+import javax.swing.JTable;
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
 
 public class ViewCadastroFuncionario extends JInternalFrame {
 	/**
@@ -22,14 +28,16 @@ public class ViewCadastroFuncionario extends JInternalFrame {
 	 */
 
 	private JTextField txtNome;
-	private JTextField txtCPF;
+	private JFormattedTextField txtCPF;
 	private JTextField txtDataNascimento;
 	private JTextField txtDtAdmissao;
 	private FuncionarioController funcionariocontrol;
 	private Funcionario funcionario = null;
-	private FuncionarioDAO funcionariodao ;
+	private FuncionarioDAO funcionariodao;
 	private FuncionarioBO funcionariobo;
 	private JComboBox<Object> comboBox;
+	private JTextField txPesquisaFuncionarioNome;
+	private JTable tableFuncionarios;
 
 	/**
 	 * Launch the application.
@@ -40,7 +48,7 @@ public class ViewCadastroFuncionario extends JInternalFrame {
 	 */
 	public ViewCadastroFuncionario() {
 		setClosable(true);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 1154, 807);
 		getContentPane().setLayout(null);
 
 		JLabel lblNome = new JLabel("Nome:");
@@ -66,7 +74,7 @@ public class ViewCadastroFuncionario extends JInternalFrame {
 		lblCpf.setBounds(18, 56, 61, 16);
 		getContentPane().add(lblCpf);
 
-		txtCPF = new JTextField();
+		txtCPF = new JFormattedTextField();
 		txtCPF.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -79,6 +87,12 @@ public class ViewCadastroFuncionario extends JInternalFrame {
 		txtCPF.setBounds(148, 51, 130, 26);
 		getContentPane().add(txtCPF);
 		txtCPF.setColumns(10);
+		try {
+			txtCPF.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("###.###.###-##")));
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		JLabel lblDataNascimento = new JLabel("Data Nascimento:");
 		lblDataNascimento.setBounds(18, 96, 122, 16);
@@ -126,8 +140,31 @@ public class ViewCadastroFuncionario extends JInternalFrame {
 		txtDtAdmissao.setBounds(148, 128, 130, 20);
 		getContentPane().add(txtDtAdmissao);
 		txtDtAdmissao.setColumns(10);
-		
-		funcionariocontrol = new FuncionarioController(txtNome, txtCPF, txtDataNascimento, txtDtAdmissao, funcionario, funcionariodao, funcionariobo,comboBox);
 
+		JLabel lblPesquisarFuncionario = new JLabel("Pesquisar Funcionario : ");
+		lblPesquisarFuncionario.setBounds(515, 19, 135, 14);
+		getContentPane().add(lblPesquisarFuncionario);
+
+		txPesquisaFuncionarioNome = new JTextField();
+		txPesquisaFuncionarioNome.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent arg0) {
+				funcionariocontrol.ListarFuncionarioPorNome();
+			}
+		});
+		txPesquisaFuncionarioNome.setBounds(641, 16, 291, 20);
+		getContentPane().add(txPesquisaFuncionarioNome);
+		txPesquisaFuncionarioNome.setColumns(10);
+
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(453, 96, 586, 313);
+		getContentPane().add(scrollPane);
+
+		tableFuncionarios = new JTable();
+		tableFuncionarios.setModel(new DefaultTableModel(new Object[][] {},
+				new String[] { "idFuncionario", "Nome", "CPF", "Data Nascimento" }));
+		scrollPane.setViewportView(tableFuncionarios);
+		funcionariocontrol = new FuncionarioController(txtNome, txtCPF, txtDataNascimento, txtDtAdmissao, funcionario,
+				funcionariodao, funcionariobo, comboBox, txPesquisaFuncionarioNome, tableFuncionarios);
 	}
 }
