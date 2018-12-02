@@ -72,25 +72,25 @@ public class ViewVenda extends JInternalFrame {
 	private JTextField txTroco;
 	private JTextField txNomec;
 	private JTextField txIdC;
-	private JFormattedTextField  txCpfc;
-	private VendaController vendacontrol;
+	private JFormattedTextField txCpfc;
+	private VendaController vendaControl;
 	private Venda venda;
-	private VendaDAO vendadao;
+	private VendaDAO vendaDao;
 	private Remedio remedio = null;
-	private RemedioDAO remediodao;
-	private List<Estoque> listremedioestoque;
-	private List<Remedio> listremedio;
-	private EstoqueDAO estoquedao;
+	private RemedioDAO remedioDao;
+	private List<Estoque> listRemedioEstoque;
+	private List<Remedio> listRemedio;
+	private EstoqueDAO estoqueDao;
 	private Estoque estoque = null;
 	private ViewCadastroCliente v1 = new ViewCadastroCliente();
 	private JComboBox<Object> comboBox;
 	private List<Estoque> carrinhoTable;
 	private JTextField txFieldIDProduto;
-	private ClienteBO clientebo;
-	private ClienteDAO clientedao;
+	private ClienteBO clienteBo;
+	private ClienteDAO clienteDao;
 	private Cliente cliente;
-	private ClienteController clientecontrol;
-	private VendaBO vendabo;
+	private ClienteController clienteControl;
+	private VendaBO vendaBo;
 	private FuncionarioController funcionariocontroller;
 	private JTextField txtNome;
 	private JTextField txtCPF;
@@ -162,15 +162,14 @@ public class ViewVenda extends JInternalFrame {
 				if (Integer.parseInt(txQuantidade.getText()) > Integer.parseInt(txQuantidadeDisponivel.getText())) {
 					JOptionPane.showMessageDialog(null, "Quantidade não disponível");
 				} else {
-				
-				
-				
-				vendacontrol.preencheCarrinho();
-				vendacontrol.pegaritemCarrinho();
-				btnFinalizarCompra.setEnabled(true);
 
+					vendaControl.preencheCarrinho();
+					vendaControl.pegaritemCarrinho();
+					btnFinalizarCompra.setEnabled(true);
+
+				}
 			}
-		}});
+		});
 
 		btnAdicionarAoCarrinho.setBounds(362, 69, 177, 23);
 		getContentPane().add(btnAdicionarAoCarrinho);
@@ -204,7 +203,7 @@ public class ViewVenda extends JInternalFrame {
 			@Override
 			public void focusLost(FocusEvent arg0) {
 
-				vendacontrol.calcularTotal();
+				vendaControl.calcularTotal();
 			}
 
 		});
@@ -286,7 +285,7 @@ public class ViewVenda extends JInternalFrame {
 				txQuantidadeDisponivel.setText("");
 				txPesquisa.setText("");
 				txFieldIDProduto.setText("");
-				vendacontrol.pesquisarPornome();
+				vendaControl.pesquisarPornome();
 
 			}
 		});
@@ -308,7 +307,7 @@ public class ViewVenda extends JInternalFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				vendacontrol.limparCarrinhoInteiro();
+				vendaControl.limparCarrinhoInteiro();
 
 			}
 		});
@@ -317,7 +316,7 @@ public class ViewVenda extends JInternalFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				vendacontrol.limparLinhaSelecionada();
+				vendaControl.limparLinhaSelecionada();
 
 			}
 		});
@@ -412,7 +411,7 @@ public class ViewVenda extends JInternalFrame {
 		getContentPane().add(lblDinheiro);
 
 		txDinheiro = new JFormattedTextField();
-		
+
 		DecimalFormat dFormat = new DecimalFormat("#,###,###.00");
 		NumberFormatter formatter = new NumberFormatter(dFormat);
 		formatter.setFormat(dFormat);
@@ -421,7 +420,7 @@ public class ViewVenda extends JInternalFrame {
 		txDinheiro.addFocusListener(new FocusAdapter() {
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				vendacontrol.calcularTroco();
+				vendaControl.calcularTroco();
 
 			}
 		});
@@ -482,13 +481,11 @@ public class ViewVenda extends JInternalFrame {
 		txCpfc.setEditable(false);
 		txCpfc.setBounds(813, 430, 177, 20);
 		getContentPane().add(txCpfc);
-		
-		
+
 		txCpfc.setColumns(10);
 		try {
 			txCpfc.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("###.###.###-##")));
-			
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -509,7 +506,7 @@ public class ViewVenda extends JInternalFrame {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
 
-				vendacontrol.preencherVenda();
+				vendaControl.preencherVenda();
 				txQuantidade.setText("");
 				if (Integer.parseInt(txQuantidadeDisponivel.getText()) == 0) {
 					lbFalta.setVisible(true);
@@ -549,7 +546,7 @@ public class ViewVenda extends JInternalFrame {
 
 		btnFinalizarCompra.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vendacontrol.salvarAction();
+				vendaControl.salvarAction();
 			}
 		});
 
@@ -593,10 +590,10 @@ public class ViewVenda extends JInternalFrame {
 			@Override
 			public void keyReleased(KeyEvent arg0) {
 				if (rdbtnNomeComercial.isSelected()) {
-					vendacontrol.pesquisarPornome();
+					vendaControl.pesquisarPornome();
 
 				} else {
-					vendacontrol.pesquisarPorComposicao();
+					vendaControl.pesquisarPorComposicao();
 
 				}
 
@@ -619,29 +616,29 @@ public class ViewVenda extends JInternalFrame {
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (rdbtnNCarto.isSelected()) {
-					clientecontrol.buscaCliente();
-					vendacontrol.calculaDesconto();
+					clienteControl.buscaCliente();
+					vendaControl.calculaDesconto();
 
 				} else {
-					
-					clientecontrol.buscaClientePorCpf();
-					vendacontrol.calculaDesconto();
+
+					clienteControl.buscaClientePorCpf();
+					vendaControl.calculaDesconto();
 				}
 
 			}
 		});
 
-		vendacontrol = new VendaController(txProduto, txPrecoUnitario, txQuantidadeDisponivel, txQuantidade, txTotal,
+		vendaControl = new VendaController(txProduto, txPrecoUnitario, txQuantidadeDisponivel, txQuantidade, txTotal,
 				table, txPesquisa, carrinho, txSubtotal, txDesconto, txTotalFinal, txCartao, txDinheiro, txTroco,
-				txNomec, txIdC, txCpfc, remedio, remediodao, venda, vendadao, listremedioestoque, listremedio,
-				estoquedao, estoque, carrinhoTable, txFieldIDProduto, clientebo, clientedao, cliente, vendabo,
+				txNomec, txIdC, txCpfc, remedio, remedioDao, venda, vendaDao, listRemedioEstoque, listRemedio,
+				estoqueDao, estoque, carrinhoTable, txFieldIDProduto, clienteBo, clienteDao, cliente, vendaBo,
 				comboBox);
 
 		funcionariocontroller = new FuncionarioController(txtNome, txtCPF, txtDataNascimento, txtDtAdmissao,
-				funcionario, funcionariodao, funcionariobo, comboBox,txPesquisaFuncionarioNome,tableFuncionarios);
+				funcionario, funcionariodao, funcionariobo, comboBox, txPesquisaFuncionarioNome, tableFuncionarios);
 
-		clientecontrol = new ClienteController(txtNome, txtCPF, txtDataNascimento, txCartaoGerado, clientedao, cliente,
-				clientebo, txCartao, txCpfc, txNomec, txIdC,txPesquisaCliente,clientesTabela);
+		clienteControl = new ClienteController(txtNome, txtCPF, txtDataNascimento, txCartaoGerado, clienteDao, cliente,
+				clienteBo, txCartao, txCpfc, txNomec, txIdC, txPesquisaCliente, clientesTabela);
 
 		JButton btnLimpar_1 = new JButton("Limpar");
 		btnLimpar_1.addActionListener(new ActionListener() {
@@ -655,20 +652,20 @@ public class ViewVenda extends JInternalFrame {
 		});
 		btnLimpar_1.setBounds(868, 471, 89, 23);
 		getContentPane().add(btnLimpar_1);
-		
+
 		JButton btnNewButton = new JButton("Limpar Carrinho ");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				vendacontrol.limparCarrinhoInteiro();
+				vendaControl.limparCarrinhoInteiro();
 			}
 		});
 		btnNewButton.setBounds(944, 125, 135, 23);
 		getContentPane().add(btnNewButton);
-		
+
 		JButton btnDeletarLinha = new JButton("Deletar Linha");
 		btnDeletarLinha.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				vendacontrol.limparLinhaSelecionada();
+				vendaControl.limparLinhaSelecionada();
 			}
 		});
 		btnDeletarLinha.setBounds(944, 172, 144, 23);

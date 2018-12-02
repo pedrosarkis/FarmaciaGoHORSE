@@ -58,11 +58,12 @@ public class ClienteDAO extends Dao implements BaseDAO<Cliente> {
 	public boolean excluir(Cliente cliente) {
 		try {
 			PreparedStatement stmt;
-			stmt = conexao.prepareStatement("Delete From Cliente where id = ?");
+			stmt = conexao.prepareStatement("Delete From Cliente where idCliente = ?");
 			stmt.setInt(1, cliente.getIdCliente());
-			stmt.executeUpdate();
-			return true;
+			int retorno = stmt.executeUpdate();
+			return (retorno >0);
 		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, e);
 			return false;
 		}
 

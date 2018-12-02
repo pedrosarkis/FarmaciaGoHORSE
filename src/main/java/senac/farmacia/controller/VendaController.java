@@ -5,6 +5,7 @@ import java.util.Formatter;
 import java.util.List;
 
 import javax.swing.JComboBox;
+import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -37,25 +38,25 @@ public class VendaController {
 	private JTextField txDesconto;
 	private JTextField txTotalFinal;
 	private JTextField txCartão;
-	private JTextField txDinheiro;
+	private JFormattedTextField txDinheiro;
 	private JTextField txTroco;
 	private JTextField txNomec;
 	private JTextField txIdC;
 	private JTextField txCpfc;
 	private Remedio remedio = null;
-	private RemedioDAO remediodao;
+	private RemedioDAO remedioDao;
 	private Venda venda = null;
-	private VendaDAO vendadao;
+	private VendaDAO vendaDao;
 	private List<Estoque> remediosEmEstoque;
 	private List<Remedio> remedios;
-	private EstoqueDAO estoquedao;
+	private EstoqueDAO estoqueDao;
 	private Estoque estoqueSelecionado = null;
 	private List<Estoque> carrinhoTable;
 	private JTextField txFieldIDProduto;
-	private ClienteBO clientebo;
-	private ClienteDAO clientedao;
+	private ClienteBO clienteBo;
+	private ClienteDAO clienteDao;
 	private Cliente cliente = null;
-	private VendaBO vendabo;
+	private VendaBO vendaBo;
 	private JComboBox comboBox;
 	private Funcionario funcionario = null;
 	private boolean resultado;
@@ -63,7 +64,7 @@ public class VendaController {
 	public VendaController(JTextField txProduto, JTextField txPrecoUnitario, JTextField txQuantidadeDisponivel,
 			JTextField txQuantidade, JTextField txTotal, JTable table, JTextField txPesquisa, JTable carrinho,
 			JTextField txSubtotal, JTextField txDesconto, JTextField txTotalFinal, JTextField txCartão,
-			JTextField txDinheiro, JTextField txTroco, JTextField txNomec, JTextField txIdC, JTextField txCpfc,
+			JFormattedTextField txDinheiro, JTextField txTroco, JTextField txNomec, JTextField txIdC, JTextField txCpfc,
 			Remedio remedio, RemedioDAO remediodao, Venda venda, VendaDAO vendadao, List<Estoque> listremedioestoque,
 			List<Remedio> listremedio, EstoqueDAO estoquedao, Estoque estoque, List<Estoque> carrinhoTable,
 			JTextField txFieldIDProduto, ClienteBO clientebo, ClienteDAO clientedao, Cliente cliente, VendaBO vendabo,
@@ -88,19 +89,19 @@ public class VendaController {
 		this.txIdC = txIdC;
 		this.txCpfc = txCpfc;
 		this.remedio = remedio;
-		this.remediodao = new RemedioDAO();
+		this.remedioDao = new RemedioDAO();
 		this.venda = new Venda();
-		this.vendadao = new VendaDAO();
+		this.vendaDao = new VendaDAO();
 		this.remediosEmEstoque = remediosEmEstoque;
 		this.remedios = listremedio;
-		this.estoquedao = new EstoqueDAO();
+		this.estoqueDao = new EstoqueDAO();
 		this.estoqueSelecionado = new Estoque();
 		this.carrinhoTable = carrinhoTable;
 		this.txFieldIDProduto = txFieldIDProduto;
-		this.clientebo = new ClienteBO();
-		this.clientedao = new ClienteDAO();
+		this.clienteBo = new ClienteBO();
+		this.clienteDao = new ClienteDAO();
 		this.cliente = new Cliente();
-		this.vendabo = new VendaBO();
+		this.vendaBo = new VendaBO();
 		this.comboBox = comboBox;
 
 	}
@@ -132,7 +133,7 @@ public class VendaController {
 
 	public void pesquisarPornome() {
 		String nome = txPesquisa.getText();
-		remediosEmEstoque = estoquedao.pesquisarPorNomeTESTE(nome);
+		remediosEmEstoque = estoqueDao.pesquisarPorNomeTESTE(nome);
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		model.setNumRows(0);
 		for (Estoque e : remediosEmEstoque) {
@@ -146,7 +147,7 @@ public class VendaController {
 	// Pesquisa remédio por composicao
 	public void pesquisarPorComposicao() {
 		String composicao = txPesquisa.getText();
-		remediosEmEstoque = estoquedao.pesquisarPorComposicao(composicao);
+		remediosEmEstoque = estoqueDao.pesquisarPorComposicao(composicao);
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		model.setNumRows(0);
 		for (Estoque e : remediosEmEstoque) {
@@ -245,7 +246,7 @@ public class VendaController {
 	public void pegaritemCarrinho() {
 		// DefaultTableModel model;
 		// model = (DefaultTableModel) carrinho.getModel();
-		double total = 0d;
+		Double total = 0d;
 
 		int qtdeDisponivel = Integer.parseInt(txQuantidadeDisponivel.getText());
 
@@ -300,6 +301,9 @@ public class VendaController {
 		txIdC.setText("");
 		txCpfc.setText("");
 		txCartão.setText("");
+		txDinheiro.setValue(null);
+		
+		
 
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		model.setRowCount(0);
@@ -353,7 +357,7 @@ public class VendaController {
 
 					}
 
-					resultado = vendabo.inserir(venda);
+					resultado = vendaBo.inserir(venda);
 
 				}
 
@@ -381,7 +385,7 @@ public class VendaController {
 
 					}
 
-					resultado = vendabo.inserir(venda);
+					resultado = vendaBo.inserir(venda);
 
 				}
 
@@ -406,6 +410,9 @@ public class VendaController {
 		txTotal.setText("");
 		txDinheiro.setText("");
 		txTroco.setText("");
+		txTotalFinal.setText("");
+		txTroco.setText("");
+		
 	}
 
 	// Limpa linha selecionada e subtrai o do subtotal o valor que tinha na linha

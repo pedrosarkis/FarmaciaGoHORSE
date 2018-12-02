@@ -24,29 +24,31 @@ public class ClienteController {
 	private JTextField txtCPF;
 	private JTextField txtDataNascimento;
 	private JTextField txCartaoGerado;
-	private ClienteDAO clientedao;
+	private ClienteDAO clienteDao;
 	private Cliente cliente = null;
-	private ClienteBO clientebo;
+	private ClienteBO clienteBo;
 	private JTextField txCartão;
-	private JFormattedTextField  txCpfc;
+	private JFormattedTextField txCpfc;
 	private List<Cliente> clientes;
 	private JTextField txNomec;
 	private JTextField txId;
 	private JTextField txPesquisaCliente;
 	private JTable clientesTabela;
+	private Cliente clienteSelecionado;
 	
 
 	public ClienteController(JTextField txtNome, JTextField txtCPF, JTextField txtDataNascimento,
 			JTextField txCartaoGerado, ClienteDAO clientedao, Cliente cliente, ClienteBO clientebo, JTextField txCartão,
-			JFormattedTextField  txCpfc, JTextField txNomec,JTextField txId,JTextField txPesquisaCliente, JTable clientesTabela) {
+			JFormattedTextField txCpfc, JTextField txNomec, JTextField txId, JTextField txPesquisaCliente,
+			JTable clientesTabela) {
 		super();
 		this.txtNome = txtNome;
 		this.txtCPF = txtCPF;
 		this.txtDataNascimento = txtDataNascimento;
 		this.txCartaoGerado = txCartaoGerado;
-		this.clientedao = new ClienteDAO();
+		this.clienteDao = new ClienteDAO();
 		this.cliente = new Cliente();
-		this.clientebo = new ClienteBO();
+		this.clienteBo = new ClienteBO();
 		this.txCartão = txCartão;
 		this.txCpfc = txCpfc;
 		this.txNomec = txNomec;
@@ -59,8 +61,8 @@ public class ClienteController {
 		/* VERIFICAR ESSA PORRA DPS */
 
 		SimpleDateFormat formatador = new SimpleDateFormat("dd/MM/yyyy");
-		
-		String novocpf = txtCPF.getText().replaceAll("[.-]","");
+
+		String novocpf = txtCPF.getText().replaceAll("[.-]", "");
 		JOptionPane.showMessageDialog(null, novocpf);
 		cliente.setCpf(txtCPF.getText());
 		cliente.setNome(txtNome.getText());
@@ -87,7 +89,7 @@ public class ClienteController {
 							Date datona = formatadorsystem.parse(datinha);
 
 							if (datona.before(formatador.parse(txtDataNascimento.getText()))) {
-								String resultado = clientebo.inserir(cliente);
+								String resultado = clienteBo.inserir(cliente);
 								JOptionPane.showMessageDialog(null, resultado);
 
 							} else {
@@ -119,34 +121,70 @@ public class ClienteController {
 
 	public void buscaCliente() {
 		int cartao = Integer.parseInt(txCartão.getText());
-		cliente = clientedao.listarPorCartao(cartao);
+		cliente = clienteDao.listarPorCartao(cartao);
 		txNomec.setText(cliente.getNome());
 		txCpfc.setText(cliente.getCpf());
 		txId.setText(String.valueOf(cliente.getIdCliente()));
-		
 
 	}
+
 	public void PesquisarClientePorNome() {
 		String nome = txPesquisaCliente.getText();
-		clientes = clientedao.listarpornome(nome);
-		
+		clientes = clienteDao.listarpornome(nome);
+
 		DefaultTableModel model = (DefaultTableModel) clientesTabela.getModel();
 		model.setNumRows(0);
-		
-		for(Cliente c : clientes) {
-			model.addRow(new Object[] { c.getIdCliente(),c.getNome(),c.getCpf(),c.getDtnascimento() });
+
+		for (Cliente c : clientes) {
+			model.addRow(new Object[] { c.getIdCliente(), c.getNome(), c.getCpf(), c.getDtnascimento() });
 		}
-		
-		
+
 	}
 
 	public void buscaClientePorCpf() {
 		String cpf = txCartão.getText();
-		cliente = clientedao.listarPorCPF(cpf);
+		cliente = clienteDao.listarPorCPF(cpf);
 		txNomec.setText(cliente.getNome());
 		txCpfc.setText(cliente.getCpf());
 		txId.setText(String.valueOf(cliente.getIdCliente()));
+
+	}
+	
+	public void preencherCliente() {
+		clienteSelecionado = pegarClienteSelecionado();
+		
+		txtNome.setText(clienteSelecionado.getNome());
+		txtCPF.setText(clienteSelecionado.getCpf());
+		txtDataNascimento.setText(String.valueOf(clienteSelecionado.getDtnascimento()));
+		txCartaoGerado.setText(String.valueOf(clienteSelecionado.getCartao()));
+	}
+	
+	public Cliente  pegarClienteSelecionado(){
+		int linha = clientesTabela.getSelectedRow();
+		
+		return  clientes.get(linha);
+		
+		
+	
 		
 	}
 
+	public void excluirCliente() {
+		int resultDialog = JOptionPane.showConfirmDialog(null, "Deseja mesmo Excluir este Cliente?", "Exlusão Cliente",JOptionPane.YES_NO_OPTION);
+
+		if (resultDialog == JOptionPane.YES_OPTION) {
+			clienteSelecionado = pegarClienteSelecionado();
+			String resultado = clienteBo.excluir(clienteSelecionado);
+			JOptionPane.showMessageDialog(null, resultado);
+			
+		}
+		
+			
+		}
+		
+		
+		
 }
+		
+
+

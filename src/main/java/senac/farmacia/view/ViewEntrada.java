@@ -35,12 +35,12 @@ public class ViewEntrada extends JInternalFrame {
 	private JTextField txtInsiraAQuantidade;
 	private JTextField txidProduto;
 	private EntradaController entradacontrol;
-	private RemedioDAO remediodao;
+	private RemedioDAO remedioDao;
 	private Remedio remedio = null;
 	private Entrada entrada = null;
-	private EntradaDAO entradadao;
-	private List<Remedio> remediosemestoque;
-	private EntradaBO entradabo;
+	private EntradaDAO entradaDao;
+	private List<Remedio> remediosEmEstoque;
+	private EntradaBO entradaBo;
 
 	/**
 	 * Launch the application.
@@ -188,8 +188,8 @@ public class ViewEntrada extends JInternalFrame {
 		});
 
 		entradacontrol = new EntradaController(txPesquisa, table, txNomeComercial, txComposicao, txValorComprado,
-				txQuantidadeComprimidos, txtInsiraAQuantidade, txidProduto, entrada, entradadao, remediosemestoque,
-				remediodao,remedio,entradabo);
+				txQuantidadeComprimidos, txtInsiraAQuantidade, txidProduto, entrada, entradaDao, remediosEmEstoque,
+				remedioDao,remedio,entradaBo);
 
 	}
 

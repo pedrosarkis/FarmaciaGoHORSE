@@ -31,10 +31,10 @@ public class ViewCadastroFuncionario extends JInternalFrame {
 	private JFormattedTextField txtCPF;
 	private JTextField txtDataNascimento;
 	private JTextField txtDtAdmissao;
-	private FuncionarioController funcionariocontrol;
+	private FuncionarioController funcionarioControl;
 	private Funcionario funcionario = null;
-	private FuncionarioDAO funcionariodao;
-	private FuncionarioBO funcionariobo;
+	private FuncionarioDAO funcionarioDao;
+	private FuncionarioBO funcionarioBo;
 	private JComboBox<Object> comboBox;
 	private JTextField txPesquisaFuncionarioNome;
 	private JTable tableFuncionarios;
@@ -115,7 +115,7 @@ public class ViewCadastroFuncionario extends JInternalFrame {
 		JButton btnSalvar = new JButton("Salvar");
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				funcionariocontrol.salvarAction();
+				funcionarioControl.salvarAction();
 
 			}
 		});
@@ -149,7 +149,7 @@ public class ViewCadastroFuncionario extends JInternalFrame {
 		txPesquisaFuncionarioNome.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent arg0) {
-				funcionariocontrol.ListarFuncionarioPorNome();
+				funcionarioControl.ListarFuncionarioPorNome();
 			}
 		});
 		txPesquisaFuncionarioNome.setBounds(641, 16, 291, 20);
@@ -164,7 +164,7 @@ public class ViewCadastroFuncionario extends JInternalFrame {
 		tableFuncionarios.setModel(new DefaultTableModel(new Object[][] {},
 				new String[] { "idFuncionario", "Nome", "CPF", "Data Nascimento" }));
 		scrollPane.setViewportView(tableFuncionarios);
-		funcionariocontrol = new FuncionarioController(txtNome, txtCPF, txtDataNascimento, txtDtAdmissao, funcionario,
-				funcionariodao, funcionariobo, comboBox, txPesquisaFuncionarioNome, tableFuncionarios);
+		funcionarioControl = new FuncionarioController(txtNome, txtCPF, txtDataNascimento, txtDtAdmissao, funcionario,
+				funcionarioDao, funcionarioBo, comboBox, txPesquisaFuncionarioNome, tableFuncionarios);
 	}
 }

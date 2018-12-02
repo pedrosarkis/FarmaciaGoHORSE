@@ -14,7 +14,7 @@ public class EstoqueController {
 	private JTextField pesquisa;
 	private JTable estoque;
 	private Estoque estoqueObjeto;
-	private EstoqueDAO estoquedao;
+	private EstoqueDAO estoqueDao;
 	private List<Estoque> remediosEmEstoque;
 	
 	public EstoqueController(JTextField pesquisa, JTable estoque, Estoque estoqueObjeto, EstoqueDAO estoquedao) {
@@ -22,13 +22,13 @@ public class EstoqueController {
 		this.pesquisa = pesquisa;
 		this.estoque = estoque;
 		this.estoqueObjeto = new Estoque();
-		this.estoquedao = new EstoqueDAO();
+		this.estoqueDao = new EstoqueDAO();
 	}
 	
 	public void listarRemediosEmEstoque() {
 		String pesquisaTexto = pesquisa.getText();
 		
-		remediosEmEstoque = estoquedao.pesquisarPorNomeTESTE(pesquisaTexto);
+		remediosEmEstoque = estoqueDao.pesquisarPorNomeTESTE(pesquisaTexto);
 		DefaultTableModel model = (DefaultTableModel) estoque.getModel();
 		model.setNumRows(0);
 		

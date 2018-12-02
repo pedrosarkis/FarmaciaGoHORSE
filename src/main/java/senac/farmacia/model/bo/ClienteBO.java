@@ -42,9 +42,17 @@ public class ClienteBO {
 		return false;
 	}
 
-	public boolean excluir(Cliente t) {
+	public String excluir(Cliente t) {
+		String mensagemRetorno = "";
 		
-		return false;
+		if(clientedao.excluir(t)) {
+			mensagemRetorno = "Cliente Excluído Com Sucesso";
+			
+		} else {
+			mensagemRetorno = "Erro ao Excluir cliente";
+		}
+		
+		return mensagemRetorno;
 	}
 
 	public String listarTodos() {
@@ -54,5 +62,7 @@ public class ClienteBO {
 		
 		return null;
 	}
-
+	
 }
+	
+	

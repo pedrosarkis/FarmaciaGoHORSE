@@ -36,10 +36,10 @@ public class ViewCadastroRemedio extends JInternalFrame {
 	private JTextField txtMiligrama;
 	private JTextField txtQuantidadeComprimido;
 	private JTextField txtPreco;
-	private RemedioDAO remediodao;
-	private RemedioController remediocontrol;
+	private RemedioDAO remedioDao;
+	private RemedioController remedioControl;
 	private Remedio remedio = null;
-	private RemedioBO remediobo;
+	private RemedioBO remedioBo;
 	private JTextField txPesquisaRemedio;
 	private JTable medicamentos;
 	private List<Remedio> medicamentosCadastrados;
@@ -182,7 +182,7 @@ public class ViewCadastroRemedio extends JInternalFrame {
 		JButton btnSalvar = new JButton("Salvar");
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				remediocontrol.SalvarAction();
+				remedioControl.SalvarAction();
 			}
 		});
 		btnSalvar.setBounds(44, 322, 117, 55);
@@ -196,7 +196,7 @@ public class ViewCadastroRemedio extends JInternalFrame {
 		txPesquisaRemedio.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent arg0) {
-				remediocontrol.pesquisarRemedioPorNome();
+				remedioControl.pesquisarRemedioPorNome();
 			}
 		});
 		txPesquisaRemedio.setBounds(764, 28, 237, 20);
@@ -211,7 +211,7 @@ public class ViewCadastroRemedio extends JInternalFrame {
 		medicamentos.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent arg0) {
-				remediocontrol.preencherRetornoRemedio();
+				remedioControl.preencherRetornoRemedio();
 			}
 		});
 		medicamentos.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "Nome Comercial", "Laboratorio",
@@ -221,14 +221,14 @@ public class ViewCadastroRemedio extends JInternalFrame {
 		JButton btnEditar = new JButton("Editar");
 		btnEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				remediocontrol.alterarRemedio();
+				remedioControl.alterarRemedio();
 				txtComposicao.setText("");
 				txtMiligrama.setText("");
 				txtNomeComercial.setText("");
 				txtPreco.setText("");
 				txtMarca.setText("");
 				txtQuantidadeComprimido.setText("");
-				remediocontrol.pesquisarRemedioPorNome();
+				remedioControl.pesquisarRemedioPorNome();
 			}
 		});
 		btnEditar.setBounds(184, 322, 117, 55);
@@ -239,14 +239,14 @@ public class ViewCadastroRemedio extends JInternalFrame {
 		btnExcluir.setToolTipText("SÓ SERÁ POSSÍVEL EXCLUIR MEDICAMENTOS QUE NÃO ESTÃO NO ESTOQUE.\r\n");
 		btnExcluir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				remediocontrol.excluirMedicamento();
+				remedioControl.excluirMedicamento();
 			}
 		});
 		btnExcluir.setBounds(311, 322, 117, 55);
 		getContentPane().add(btnExcluir);
 
-		remediocontrol = new RemedioController(txtMarca, txtNomeComercial, txtComposicao, txtMiligrama,
-				txtQuantidadeComprimido, txtPreco, remediodao, remedio, remediobo, medicamentos,
+		remedioControl = new RemedioController(txtMarca, txtNomeComercial, txtComposicao, txtMiligrama,
+				txtQuantidadeComprimido, txtPreco, remedioDao, remedio, remedioBo, medicamentos,
 				medicamentosCadastrados, remedioSelecionado, txPesquisaRemedio);
 
 	}

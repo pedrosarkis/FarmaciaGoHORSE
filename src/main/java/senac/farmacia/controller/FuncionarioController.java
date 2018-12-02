@@ -22,9 +22,9 @@ public class FuncionarioController {
 	private JTextField txtDataNascimento;
 	private JTextField txtDtAdmissao;
 	private Funcionario funcionario = null;
-	private FuncionarioDAO funcionariodao;
-	private FuncionarioBO funcionariobo;
-	private List<Funcionario> listfunc = null;
+	private FuncionarioDAO funcionarioDao;
+	private FuncionarioBO funcionarioBo;
+	private List<Funcionario> listFunc = null;
 	private JComboBox<Object> comboBox;
 	private JTextField txPesquisaFuncionarioNome;
 	private JTable tableFuncionarios;
@@ -39,8 +39,8 @@ public class FuncionarioController {
 		this.txtDataNascimento = txtDataNascimento;
 		this.txtDtAdmissao = txtDtAdmissao;
 		this.funcionario = new Funcionario();
-		this.funcionariodao = new FuncionarioDAO();
-		this.funcionariobo = new FuncionarioBO();
+		this.funcionarioDao = new FuncionarioDAO();
+		this.funcionarioBo = new FuncionarioBO();
 		this.comboBox = comboBox;
 		this.txPesquisaFuncionarioNome = txPesquisaFuncionarioNome;
 		this.tableFuncionarios = tableFuncionarios;
@@ -65,7 +65,7 @@ public class FuncionarioController {
 					if (!txtDataNascimento.getText().trim().isEmpty()) {
 						try {
 							funcionario.setDtNascimento(formatador.parse(txtDataNascimento.getText()));
-							String resultado = funcionariobo.inserir(funcionario);
+							String resultado = funcionarioBo.inserir(funcionario);
 							JOptionPane.showMessageDialog(null, resultado);
 
 							DefaultTableModel model = (DefaultTableModel) tableFuncionarios.getModel();
@@ -99,10 +99,10 @@ public class FuncionarioController {
 	public void popularComboBoxFuncionarioAction() {
 		DefaultComboBoxModel<Object> comboModel = (DefaultComboBoxModel<Object>) comboBox.getModel();
 		comboBox.removeAllItems();
-		listfunc = funcionariodao.popularComboNomeFuncionario();
-		for (int i = 0; i < listfunc.size(); i++) {
-			listfunc.get(i);
-			comboBox.addItem(listfunc.get(i));
+		listFunc = funcionarioDao.popularComboNomeFuncionario();
+		for (int i = 0; i < listFunc.size(); i++) {
+			listFunc.get(i);
+			comboBox.addItem(listFunc.get(i));
 
 		}
 
@@ -110,11 +110,11 @@ public class FuncionarioController {
 
 	public void ListarFuncionarioPorNome() {
 		String nome = txPesquisaFuncionarioNome.getText();
-		listfunc = funcionariodao.listarFuncionarioPorNome(nome);
+		listFunc = funcionarioDao.listarFuncionarioPorNome(nome);
 		DefaultTableModel model = (DefaultTableModel) tableFuncionarios.getModel();
 
 		model.setNumRows(0);
-		for (Funcionario f : listfunc) {
+		for (Funcionario f : listFunc) {
 			model.addRow(new Object[] { f.getIdFuncionario(), f.getNome(), f.getCpf(), f.getDtNascimento() });
 		}
 

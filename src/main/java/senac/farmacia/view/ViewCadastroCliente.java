@@ -35,10 +35,10 @@ public class ViewCadastroCliente extends JInternalFrame {
 	private JTextField txtCPF;
 	private JTextField txtDataNascimento;
 	private JTextField txCartaoGerado;
-	private ClienteDAO clientedao = null;
+	private ClienteDAO clienteDao = null;
 	private Cliente cliente;
-	private ClienteController clientecontrol =null;
-	private ClienteBO clientebo ;
+	private ClienteController clienteControl =null;
+	private ClienteBO clienteBo ;
 	private JTextField txCartão;
 	private JFormattedTextField  txCpfc;
 	private JTextField txNomec;
@@ -138,13 +138,13 @@ public class ViewCadastroCliente extends JInternalFrame {
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				clientecontrol.salvarAction();
+				clienteControl.salvarAction();
 				
 				
 
 			}
 		});
-		btnSalvar.setBounds(259, 195, 117, 52);
+		btnSalvar.setBounds(151, 195, 117, 52);
 		getContentPane().add(btnSalvar);
 
 		JLabel lblCartoGerado = new JLabel("Cartão Gerado :");
@@ -175,7 +175,7 @@ public class ViewCadastroCliente extends JInternalFrame {
 			}
 			
 		});
-		btnGerarCartao.setBounds(88, 195, 117, 52);
+		btnGerarCartao.setBounds(18, 195, 117, 52);
 		getContentPane().add(btnGerarCartao);
 		
 		
@@ -188,7 +188,7 @@ public class ViewCadastroCliente extends JInternalFrame {
 		txPesquisaCliente.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent arg0) {
-				clientecontrol.PesquisarClientePorNome();
+				clienteControl.PesquisarClientePorNome();
 			}
 		});
 		txPesquisaCliente.setBounds(740, 16, 309, 20);
@@ -200,6 +200,12 @@ public class ViewCadastroCliente extends JInternalFrame {
 		getContentPane().add(scrollPane);
 		
 		clientesTabela = new JTable();
+		clientesTabela.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseReleased(MouseEvent arg0) {
+				clienteControl.preencherCliente();
+			}
+		});
 		clientesTabela.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
@@ -209,7 +215,16 @@ public class ViewCadastroCliente extends JInternalFrame {
 		));
 		scrollPane.setViewportView(clientesTabela);
 		
-		clientecontrol = new ClienteController(txtNome, txtCPF, txtDataNascimento, txCartaoGerado, clientedao, cliente,clientebo,txCartão,txCpfc,txNomec,txId,txPesquisaCliente,clientesTabela);
+		clienteControl = new ClienteController(txtNome, txtCPF, txtDataNascimento, txCartaoGerado, clienteDao, cliente,clienteBo,txCartão,txCpfc,txNomec,txId,txPesquisaCliente,clientesTabela);
+		
+		JButton btnExcluir = new JButton("Excluir");
+		btnExcluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				clienteControl.excluirCliente();
+			}
+		});
+		btnExcluir.setBounds(283, 195, 117, 52);
+		getContentPane().add(btnExcluir);
 
 	}
 }

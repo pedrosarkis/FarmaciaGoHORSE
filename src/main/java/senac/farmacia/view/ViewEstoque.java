@@ -18,9 +18,9 @@ import senac.farmacia.model.vo.Estoque;
 public class ViewEstoque extends JInternalFrame {
 	private JTextField pesquisa;
 	private JTable estoque;
-	private EstoqueDAO estoquedao;
+	private EstoqueDAO estoqueDao;
 	private Estoque estoqueObjeto;
-	private EstoqueController estoquecontrol;
+	private EstoqueController estoqueControl;
 
 	/**
 	 * Launch the application.
@@ -53,7 +53,7 @@ public class ViewEstoque extends JInternalFrame {
 		pesquisa.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent arg0) {
-				estoquecontrol.listarRemediosEmEstoque();
+				estoqueControl.listarRemediosEmEstoque();
 				
 			}
 		});
@@ -75,7 +75,7 @@ public class ViewEstoque extends JInternalFrame {
 		));
 		scrollPane.setViewportView(estoque);
 		
-		estoquecontrol = new EstoqueController(pesquisa, estoque, estoqueObjeto, estoquedao);
+		estoqueControl = new EstoqueController(pesquisa, estoque, estoqueObjeto, estoqueDao);
 
 	}
 }

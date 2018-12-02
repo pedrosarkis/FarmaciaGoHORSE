@@ -20,9 +20,9 @@ public class RemedioController {
 	private JTextField txtMiligrama;
 	private JTextField txtQuantidadeComprimido;
 	private JTextField txtPreco;
-	private RemedioDAO remediodao;
+	private RemedioDAO remedioDao;
 	private Remedio remedio;
-	private RemedioBO remediobo;
+	private RemedioBO remedioBo;
 	private JTable medicamentos;
 	private List<Remedio> medicamentosCadastrados;
 	private Remedio remedioSelecionado;
@@ -39,9 +39,9 @@ public class RemedioController {
 		this.txtMiligrama = txtMiligrama;
 		this.txtQuantidadeComprimido = txtQuantidadeComprimido;
 		this.txtPreco = txtPreco;
-		this.remediodao = new RemedioDAO();
+		this.remedioDao = new RemedioDAO();
 		this.remedio = new Remedio();
-		this.remediobo = new RemedioBO();
+		this.remedioBo = new RemedioBO();
 		this.medicamentos = medicamentos;
 		this.medicamentosCadastrados = medicamentosCadastrados;
 		this.remedioSelecionado = remedioSelecionado;
@@ -64,9 +64,10 @@ public class RemedioController {
 			remedio.setPrecounitario(Double.parseDouble(txtPreco.getText()));
 			remedio.setQdtecomprimidos(Integer.parseInt(txtQuantidadeComprimido.getText()));
 
-			String resultado = remediobo.inserir(remedio);
+			String resultado = remedioBo.inserir(remedio);
 			JOptionPane.showMessageDialog(null, resultado);
 
+			
 			DefaultTableModel model = (DefaultTableModel) medicamentos.getModel();
 			model.addRow(
 					new Object[] { remedio.getNomecomercial(), remedio.getLaboratorio(), remedio.getPrecounitario(),
@@ -78,7 +79,7 @@ public class RemedioController {
 
 	public void pesquisarRemedioPorNome() {
 		String nome = txPesquisaRemedio.getText();
-		medicamentosCadastrados = remediodao.PesquisarRemedioPorNome(nome);
+		medicamentosCadastrados = remedioDao.PesquisarRemedioPorNome(nome);
 		DefaultTableModel model = (DefaultTableModel) medicamentos.getModel();
 		model.setNumRows(0);
 		for (Remedio r : medicamentosCadastrados) {
@@ -119,7 +120,7 @@ public class RemedioController {
 		r.setPrecounitario(Double.parseDouble(txtPreco.getText()));
 		r.setQdtecomprimidos(Integer.parseInt(txtQuantidadeComprimido.getText()));
 
-		String resultado = remediobo.alterar(r);
+		String resultado = remedioBo.alterar(r);
 		JOptionPane.showMessageDialog(null, resultado);
 
 	}
@@ -133,7 +134,7 @@ public class RemedioController {
 
 			remedioSelecionado = pegarItemTableRemedio();
 
-			String resultado = remediobo.excluir(remedioSelecionado);
+			String resultado = remedioBo.excluir(remedioSelecionado);
 			JOptionPane.showMessageDialog(null, resultado);
 
 		}

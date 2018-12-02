@@ -24,10 +24,10 @@ public class EntradaController {
 	private JTextField txidProduto;
 	private Entrada entrada = null;
 	private EntradaDAO entradadao;
-	private List<Remedio> remediosemestoque;
-	private RemedioDAO remediodao;
+	private List<Remedio> remediosEmEstoque;
+	private RemedioDAO remedioDao;
 	private Remedio remedio = null;
-	private EntradaBO entradabo;
+	private EntradaBO entradaBo;
 
 	public EntradaController(JTextField txPesquisa, JTable table, JTextField txNomeComercial, JTextField txComposicao,
 			JTextField txValorComprado, JTextField txQuantidadeComprimidos, JTextField txtInsiraAQuantidade,
@@ -44,10 +44,10 @@ public class EntradaController {
 		this.txidProduto = txidProduto;
 		this.entrada = new Entrada();
 		this.entradadao = new EntradaDAO();
-		this.remediosemestoque = remediosemestoque;
-		this.remediodao = new RemedioDAO();
+		this.remediosEmEstoque = remediosemestoque;
+		this.remedioDao = new RemedioDAO();
 		this.remedio = remedio;
-		this.entradabo = new EntradaBO();
+		this.entradaBo = new EntradaBO();
 	}
 
 	public void SalvarAction() {
@@ -64,7 +64,7 @@ public class EntradaController {
 			JOptionPane.showMessageDialog(null, "É preciso selecionar um remédio antes de clicar em salvar");
 				
 			} else {
-				String resultado = entradabo.inserir(entrada);
+				String resultado = entradaBo.inserir(entrada);
 				JOptionPane.showMessageDialog(null, resultado);
 				
 			}
@@ -84,15 +84,15 @@ public class EntradaController {
 		DefaultTableModel model;
 		model = (DefaultTableModel) table.getModel();
 		int linha = table.getSelectedRow();
-		return remediosemestoque.get(linha);
+		return remediosEmEstoque.get(linha);
 	}
 
 	public void pesquisarPornome() {
 		String nome = txPesquisa.getText();
-		remediosemestoque = remediodao.PesquisarRemedioPorNome(nome);
+		remediosEmEstoque = remedioDao.PesquisarRemedioPorNome(nome);
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		model.setNumRows(0);
-		for (Remedio r : remediosemestoque) {
+		for (Remedio r : remediosEmEstoque) {
 			model.addRow(new Object [] {r.getIdRemedio(), r.getNomecomercial(), r.getComposiçao(),r.getQdtecomprimidos()});
 		}
 		
