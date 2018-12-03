@@ -164,7 +164,7 @@ public class ViewVenda extends JInternalFrame {
 				} else {
 
 					vendaControl.preencheCarrinho();
-					vendaControl.pegaritemCarrinho();
+					vendaControl.pegarItemCarrinho();
 					btnFinalizarCompra.setEnabled(true);
 
 				}
@@ -616,7 +616,7 @@ public class ViewVenda extends JInternalFrame {
 		btnBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if (rdbtnNCarto.isSelected()) {
-					clienteControl.buscaCliente();
+					clienteControl.buscarCliente();
 					vendaControl.calculaDesconto();
 
 				} else {

@@ -243,7 +243,7 @@ public class VendaController {
 
 	// Atualiza jtexfields abaixo do carrinho (Total,subtotal,etc.....) Verificar
 	// erro depois Erro corrigido
-	public void pegaritemCarrinho() {
+	public void pegarItemCarrinho() {
 		// DefaultTableModel model;
 		// model = (DefaultTableModel) carrinho.getModel();
 		Double total = 0d;

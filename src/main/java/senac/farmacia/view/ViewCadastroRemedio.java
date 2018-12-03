@@ -182,7 +182,7 @@ public class ViewCadastroRemedio extends JInternalFrame {
 		JButton btnSalvar = new JButton("Salvar");
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				remedioControl.SalvarAction();
+				remedioControl.salvarAction();
 			}
 		});
 		btnSalvar.setBounds(44, 322, 117, 55);

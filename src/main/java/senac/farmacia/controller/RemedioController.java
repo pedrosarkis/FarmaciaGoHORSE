@@ -48,7 +48,7 @@ public class RemedioController {
 		this.txPesquisaRemedio = txPesquisaRemedio;
 	}
 
-	public void SalvarAction() {
+	public void salvarAction() {
 
 		if (txtComposicao.getText().trim().isEmpty() || txtMarca.getText().trim().isEmpty()
 				|| txtMiligrama.getText().trim().isEmpty() || txtNomeComercial.getText().trim().isEmpty()

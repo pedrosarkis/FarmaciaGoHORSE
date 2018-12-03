@@ -188,7 +188,7 @@ public class ViewCadastroCliente extends JInternalFrame {
 		txPesquisaCliente.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent arg0) {
-				clienteControl.PesquisarClientePorNome();
+				clienteControl.pesquisarClientePorNome();
 			}
 		});
 		txPesquisaCliente.setBounds(740, 16, 309, 20);

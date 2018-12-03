@@ -50,7 +50,7 @@ public class EntradaController {
 		this.entradaBo = new EntradaBO();
 	}
 
-	public void SalvarAction() {
+	public void salvarAction() {
 		
 		if (txtInsiraAQuantidade.getText().trim().isEmpty()) {
 			
@@ -73,21 +73,21 @@ public class EntradaController {
 		
 	
 	public void preencherEntrada() {
-		remedio = pegaritemtable();
+		remedio = pegarItemTable();
 		txidProduto.setText(String.valueOf(remedio.getIdRemedio()));
 		txNomeComercial.setText(remedio.getNomecomercial());
 		txComposicao.setText(remedio.getComposiçao());
 		txQuantidadeComprimidos.setText(String.valueOf(remedio.getQdtecomprimidos()));
 		
 	}
-	public Remedio pegaritemtable() {
+	public Remedio pegarItemTable() {
 		DefaultTableModel model;
 		model = (DefaultTableModel) table.getModel();
 		int linha = table.getSelectedRow();
 		return remediosEmEstoque.get(linha);
 	}
 
-	public void pesquisarPornome() {
+	public void pesquisarPorNome() {
 		String nome = txPesquisa.getText();
 		remediosEmEstoque = remedioDao.PesquisarRemedioPorNome(nome);
 		DefaultTableModel model = (DefaultTableModel) table.getModel();

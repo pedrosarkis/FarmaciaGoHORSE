@@ -119,7 +119,7 @@ public class ClienteController {
 
 	}
 
-	public void buscaCliente() {
+	public void buscarCliente() {
 		int cartao = Integer.parseInt(txCartão.getText());
 		cliente = clienteDao.listarPorCartao(cartao);
 		txNomec.setText(cliente.getNome());
@@ -128,7 +128,7 @@ public class ClienteController {
 
 	}
 
-	public void PesquisarClientePorNome() {
+	public void pesquisarClientePorNome() {
 		String nome = txPesquisaCliente.getText();
 		clientes = clienteDao.listarpornome(nome);
 

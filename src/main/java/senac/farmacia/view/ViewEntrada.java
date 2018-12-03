@@ -75,7 +75,7 @@ public class ViewEntrada extends JInternalFrame {
 		txPesquisa.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyReleased(KeyEvent arg0) {
-				entradacontrol.pesquisarPornome();
+				entradacontrol.pesquisarPorNome();
 				
 			}
 		});
@@ -177,7 +177,7 @@ public class ViewEntrada extends JInternalFrame {
 		txidProduto.setColumns(10);
 		btnSalvarCompra.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				entradacontrol.SalvarAction();
+				entradacontrol.salvarAction();
 			}
 		});
 		table.addMouseListener(new MouseAdapter() {
