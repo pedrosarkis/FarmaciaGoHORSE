@@ -66,12 +66,20 @@ public class RemedioController {
 
 			String resultado = remedioBo.inserir(remedio);
 			JOptionPane.showMessageDialog(null, resultado);
+			
 
 			
 			DefaultTableModel model = (DefaultTableModel) medicamentos.getModel();
 			model.addRow(
 					new Object[] { remedio.getNomecomercial(), remedio.getLaboratorio(), remedio.getPrecounitario(),
 							remedio.getQdtecomprimidos(), remedio.getComposiçao(), remedio.getConcentraçao() });
+			txtComposicao.setText("");
+			txtNomeComercial.setText("");
+			txtMarca.setText("");
+			txtMiligrama.setText("");
+			txtPreco.setText("");
+			txtQuantidadeComprimido.setText("");
+			
 
 		}
 

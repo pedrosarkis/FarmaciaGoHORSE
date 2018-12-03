@@ -37,7 +37,7 @@ public class GerarPlanilhaVenda {
 			novaLinha.createCell(5).setCellValue(venda.getValorVenda());
 			novaLinha.createCell(6).setCellValue(venda.getValorVendido());
 			novaLinha.createCell(7).setCellValue(venda.getQuantidade());
-			novaLinha.createCell(8).setCellValue(venda.getCliente().getIdCliente());
+			//novaLinha.createCell(8).setCellValue(venda.getCliente().getIdCliente());
 			
 		}
 		

@@ -123,16 +123,16 @@ public class ViewRelatorioMedicamento extends JInternalFrame {
 		scrollPane.setViewportView(table);
 
 		JLabel lblQuantiadeComprimidos = new JLabel("Quantidade Comprimidos maior e menor que");
-		lblQuantiadeComprimidos.setBounds(587, 55, 218, 14);
+		lblQuantiadeComprimidos.setBounds(587, 55, 256, 14);
 		getContentPane().add(lblQuantiadeComprimidos);
 
 		txMaiorQue = new JTextField();
-		txMaiorQue.setBounds(815, 52, 43, 20);
+		txMaiorQue.setBounds(864, 52, 43, 20);
 		getContentPane().add(txMaiorQue);
 		txMaiorQue.setColumns(10);
 
 		txMenorQue = new JTextField();
-		txMenorQue.setBounds(885, 52, 36, 20);
+		txMenorQue.setBounds(943, 52, 36, 20);
 		getContentPane().add(txMenorQue);
 		txMenorQue.setColumns(10);
 

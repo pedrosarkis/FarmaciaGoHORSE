@@ -262,7 +262,7 @@ public class VendaController {
 
 	}
 
-		private final static double desconto = 10;  // desconto aplicado em uma constante
+		private final static double desconto = 10d;  // desconto aplicado em uma constante
 	// calcula o desconto se houver cliente retornado na pesqusisa
 	public void calculaDesconto() {
 

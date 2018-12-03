@@ -163,16 +163,16 @@ public class ViewRelatorioVenda extends JInternalFrame{
 		scrollPane.setViewportView(table);
 		
 		JLabel lblQuantidadeDeRemedio = new JLabel("Quantidade de Remedio  maior que,menor que:");
-		lblQuantidadeDeRemedio.setBounds(6, 71, 244, 14);
+		lblQuantidadeDeRemedio.setBounds(6, 71, 348, 14);
 		getContentPane().add(lblQuantidadeDeRemedio);
 		
 		txMaiorQue = new JTextField();
-		txMaiorQue.setBounds(260, 68, 38, 20);
+		txMaiorQue.setBounds(409, 68, 38, 20);
 		getContentPane().add(txMaiorQue);
 		txMaiorQue.setColumns(10);
 		
 		txMenorQue = new JTextField();
-		txMenorQue.setBounds(338, 68, 38, 20);
+		txMenorQue.setBounds(491, 68, 38, 20);
 		getContentPane().add(txMenorQue);
 		txMenorQue.setColumns(10);
 	}
